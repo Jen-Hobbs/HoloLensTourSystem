@@ -182,7 +182,7 @@ GameObject:
   - component: {fileID: 288688978}
   - component: {fileID: 288688977}
   m_Layer: 5
-  m_Name: Image
+  m_Name: DocImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -225,7 +225,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -499,6 +499,8 @@ GameObject:
   - component: {fileID: 464754224}
   - component: {fileID: 464754226}
   - component: {fileID: 464754225}
+  - component: {fileID: 464754228}
+  - component: {fileID: 464754227}
   m_Layer: 5
   m_Name: Image
   m_TagString: Untagged
@@ -560,6 +562,36 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 464754223}
   m_CullTransparentMesh: 0
+--- !u!114 &464754227
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 464754223}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f3b14722efc59e8478bdcd38528e3379, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  docImage: {fileID: 288688975}
+  textInfo: {fileID: 696571213}
+  NextSprite: {fileID: 10911, guid: 0000000000000000f000000000000000, type: 0}
+  PreviousSprite: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
+  title: {fileID: 1065035855}
+--- !u!65 &464754228
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 464754223}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 200, y: 150, z: 0.1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &552363090
 GameObject:
   m_ObjectHideFlags: 0
@@ -859,7 +891,7 @@ GameObject:
   - component: {fileID: 919918622}
   - component: {fileID: 919918623}
   m_Layer: 5
-  m_Name: Button
+  m_Name: Next Page
   m_TagString: Next Page
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -969,7 +1001,7 @@ BoxCollider:
   m_GameObject: {fileID: 919918617}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Size: {x: 60, y: 15, z: 0.01}
   m_Center: {x: 0, y: 0, z: 0}
@@ -980,12 +1012,16 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 919918617}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f3b14722efc59e8478bdcd38528e3379, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  docImage: {fileID: 288688975}
   textInfo: {fileID: 696571213}
+  NextSprite: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
+  PreviousSprite: {fileID: 10911, guid: 0000000000000000f000000000000000, type: 0}
+  title: {fileID: 1065035855}
 --- !u!1 &953876141
 GameObject:
   m_ObjectHideFlags: 0
@@ -1141,14 +1177,14 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 26
+  m_fontSize: 21.8
   m_fontSizeBase: 26
   m_fontWeight: 400
-  m_enableAutoSizing: 0
+  m_enableAutoSizing: 1
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_textAlignment: 257
+  m_textAlignment: 258
   m_characterSpacing: 0
   m_wordSpacing: 0
   m_lineSpacing: 0
@@ -1158,7 +1194,7 @@ MonoBehaviour:
   m_enableWordWrapping: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
-  m_firstOverflowCharacterIndex: 0
+  m_firstOverflowCharacterIndex: -1
   m_linkedTextComponent: {fileID: 0}
   m_isLinkedTextComponent: 0
   m_isTextTruncated: 0
@@ -1179,7 +1215,7 @@ MonoBehaviour:
   m_firstVisibleCharacter: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 1.6082525, z: 86.93888, w: 23.988457}
+  m_margin: {x: -8.387459, y: 1.6082525, z: 72.34068, w: 23.988457}
   m_textInfo:
     textComponent: {fileID: 1065035855}
     characterCount: 8
@@ -1534,12 +1570,16 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1603407613}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f3b14722efc59e8478bdcd38528e3379, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  docImage: {fileID: 288688975}
   textInfo: {fileID: 696571213}
+  NextSprite: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
+  PreviousSprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  title: {fileID: 1065035855}
 --- !u!65 &1603407616
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1549,7 +1589,7 @@ BoxCollider:
   m_GameObject: {fileID: 1603407613}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Size: {x: 60, y: 15, z: 0.01}
   m_Center: {x: 0, y: 0, z: 0}

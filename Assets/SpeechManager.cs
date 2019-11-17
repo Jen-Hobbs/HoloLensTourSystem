@@ -20,7 +20,7 @@ public class SpeechManager : MonoBehaviour
         {
             var focusedObject = LocationManager.Instance.FocusedObject;
             Debug.Log("Next page Called");
-            if(focusedObject.tag == "Next Page")
+            if(focusedObject != null)
             {
                 focusedObject.SendMessage("OnNextPage", SendMessageOptions.DontRequireReceiver);
                 Debug.Log(focusedObject);
@@ -30,7 +30,7 @@ public class SpeechManager : MonoBehaviour
         {
             var focusedObject = LocationManager.Instance.FocusedObject;
             Debug.Log("Previous page Called");
-            if (focusedObject.tag == "Previous Page")
+            if (focusedObject != null)
             {
                 focusedObject.SendMessage("OnPreviousPage", SendMessageOptions.DontRequireReceiver);
                 Debug.Log(focusedObject);
