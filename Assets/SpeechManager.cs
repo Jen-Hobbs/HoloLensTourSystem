@@ -13,15 +13,27 @@ public class SpeechManager : MonoBehaviour
     {
         keywords.Add("Help", () =>
         {
-            
+            Debug.Log("help called");
             this.BroadcastMessage("OnHelp");
         });
         keywords.Add("Next Page", () =>
         {
             var focusedObject = LocationManager.Instance.FocusedObject;
-            if(focusedObject != null)
+            Debug.Log("Next page Called");
+            if(focusedObject.tag == "Next Page")
             {
-                focusedObject.SendMessage("NextPage", SendMessageOptions.DontRequireReceiver);
+                focusedObject.SendMessage("OnNextPage", SendMessageOptions.DontRequireReceiver);
+                Debug.Log(focusedObject);
+            }
+        });
+        keywords.Add("Previous Page", () =>
+        {
+            var focusedObject = LocationManager.Instance.FocusedObject;
+            Debug.Log("Previous page Called");
+            if (focusedObject.tag == "Previous Page")
+            {
+                focusedObject.SendMessage("OnPreviousPage", SendMessageOptions.DontRequireReceiver);
+                Debug.Log(focusedObject);
             }
         });
         // Tell the KeywordRecognizer about our keywords.

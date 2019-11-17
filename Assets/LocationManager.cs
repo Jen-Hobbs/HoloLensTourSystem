@@ -21,7 +21,7 @@ public class LocationManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        GameObject oldFocusObject = FocusedObject;
 
         headPosition = Camera.main.transform.position;
         gazeDirection = Camera.main.transform.position;
@@ -30,8 +30,7 @@ public class LocationManager : MonoBehaviour
             //&& hitInfo.transform.tag == "interactible"
             )
         {
-            this.transform.position = hitInfo.point;
-            this.transform.rotation = Quaternion.FromToRotation(Vector3.up, hitInfo.normal);
+            
             // Debug.Log("curser hit");
             FocusedObject = hitInfo.collider.gameObject;
 
