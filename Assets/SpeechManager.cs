@@ -36,6 +36,23 @@ public class SpeechManager : MonoBehaviour
                 Debug.Log(focusedObject);
             }
         });
+        keywords.Add("Open Document", () =>
+        {
+            var focusedObject = LocationManager.Instance.FocusedObject;
+            if (focusedObject != null)
+            {
+                focusedObject.SendMessage("OnOpenDocument", SendMessageOptions.DontRequireReceiver);
+            }
+        });
+        keywords.Add("Close Document", () =>
+        {
+            GameObject[] gameObjects = GameObject.FindGameObjectsWithTag("interactible");
+
+            for (var i = 0; i < gameObjects.Length; i++)
+            {
+                Destroy(gameObjects[i]);
+            }
+        });
         // Tell the KeywordRecognizer about our keywords.
         keywordRecognizer = new KeywordRecognizer(keywords.Keys.ToArray());
 
