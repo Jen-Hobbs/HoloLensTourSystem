@@ -8,4 +8,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/SampleScene.unity
     guid: 26d42c307b8edef47877592dda9b1436
+  - enabled: 0
+    path: Assets/Scenes/canvas.unity
+    guid: 8eaf8f6e28ae76a49bca73ebdc11df58
   m_configObjects: {}

@@ -1,24 +1,48 @@
 ﻿using System.Collections;
+using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Windows.Speech;
 
 public class SpeechManager : MonoBehaviour
 {
-    private KeywordRecognizer recognizeWord = null;
-    Dictionary<string, System.Action> keywords = new Dictionary<string, System.Action>();
+    private KeywordRecognizer keywordRecognizer = null;
+    private Dictionary<string, System.Action> keywords = new Dictionary<string, System.Action>();
     // Start is called before the first frame update
     void Start()
     {
+        keywords.Add("Help", () =>
+        {
+            
+            this.BroadcastMessage("OnHelp");
+        });
         keywords.Add("Next Page", () =>
         {
-             //interact = CanvasGaze.Instance.FocusedObject;
+            var focusedObject = LocationManager.Instance.FocusedObject;
+            if(focusedObject != null)
+            {
+                focusedObject.SendMessage("NextPage", SendMessageOptions.DontRequireReceiver);
+            }
         });
+        // Tell the KeywordRecognizer about our keywords.
+        keywordRecognizer = new KeywordRecognizer(keywords.Keys.ToArray());
+
+        // Register a callback for the KeywordRecognizer and start recognizing!
+        keywordRecognizer.OnPhraseRecognized += KeywordRecognizer_OnPhraseRecognized;
+        keywordRecognizer.Start();
     }
 
     // Update is called once per frame
     void Update()
     {
         
+    }
+    private void KeywordRecognizer_OnPhraseRecognized(PhraseRecognizedEventArgs args)
+    {
+        System.Action keywordAction;
+        if (keywords.TryGetValue(args.text, out keywordAction))
+        {
+            keywordAction.Invoke();
+        }
     }
 }
