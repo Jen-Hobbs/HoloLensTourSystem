@@ -888,8 +888,6 @@ GameObject:
   - component: {fileID: 919918621}
   - component: {fileID: 919918620}
   - component: {fileID: 919918619}
-  - component: {fileID: 919918622}
-  - component: {fileID: 919918623}
   m_Layer: 5
   m_Name: Next Page
   m_TagString: Next Page
@@ -992,36 +990,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 919918617}
   m_CullTransparentMesh: 0
---- !u!65 &919918622
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 919918617}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 0
-  serializedVersion: 2
-  m_Size: {x: 60, y: 15, z: 0.01}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &919918623
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 919918617}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f3b14722efc59e8478bdcd38528e3379, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  docImage: {fileID: 288688975}
-  textInfo: {fileID: 696571213}
-  NextSprite: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
-  PreviousSprite: {fileID: 10911, guid: 0000000000000000f000000000000000, type: 0}
-  title: {fileID: 1065035855}
 --- !u!1 &953876141
 GameObject:
   m_ObjectHideFlags: 0
@@ -1534,8 +1502,6 @@ GameObject:
   - component: {fileID: 1603407619}
   - component: {fileID: 1603407618}
   - component: {fileID: 1603407617}
-  - component: {fileID: 1603407616}
-  - component: {fileID: 1603407615}
   m_Layer: 5
   m_Name: Previous
   m_TagString: Previous Page
@@ -1563,36 +1529,6 @@ RectTransform:
   m_AnchoredPosition: {x: 95, y: -140}
   m_SizeDelta: {x: 60, y: 15}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1603407615
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1603407613}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f3b14722efc59e8478bdcd38528e3379, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  docImage: {fileID: 288688975}
-  textInfo: {fileID: 696571213}
-  NextSprite: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
-  PreviousSprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
-  title: {fileID: 1065035855}
---- !u!65 &1603407616
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1603407613}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 0
-  serializedVersion: 2
-  m_Size: {x: 60, y: 15, z: 0.01}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &1603407617
 MonoBehaviour:
   m_ObjectHideFlags: 0
