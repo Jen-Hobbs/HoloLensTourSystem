@@ -991,6 +991,7 @@ MonoBehaviour:
   NextSprite: {fileID: 10911, guid: 0000000000000000f000000000000000, type: 0}
   PreviousSprite: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
   title: {fileID: 1834684458027544358}
+  content: {fileID: 8975187370273178922, guid: b53635f774fe03e4196bb28d16bb0815, type: 3}
 --- !u!1 &1834684458736241702
 GameObject:
   m_ObjectHideFlags: 0

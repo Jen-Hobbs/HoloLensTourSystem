@@ -7,10 +7,12 @@ using UnityEngine.Windows.Speech;
 public class SpeechManager : MonoBehaviour
 {
     private KeywordRecognizer keywordRecognizer = null;
-    private Dictionary<string, System.Action> keywords = new Dictionary<string, System.Action>();
+    private static Dictionary<string, System.Action> keywords = new Dictionary<string, System.Action>();
+    
     // Start is called before the first frame update
     void Start()
     {
+        
         keywords.Add("Help", () =>
         {
             Debug.Log("help called");
@@ -41,6 +43,7 @@ public class SpeechManager : MonoBehaviour
             var focusedObject = LocationManager.Instance.FocusedObject;
             if (focusedObject != null)
             {
+                Debug.Log("open document said");
                 focusedObject.SendMessage("OnOpenDocument", SendMessageOptions.DontRequireReceiver);
             }
         });
@@ -72,6 +75,23 @@ public class SpeechManager : MonoBehaviour
         if (keywords.TryGetValue(args.text, out keywordAction))
         {
             keywordAction.Invoke();
+        }
+    }
+    //dont forget to delete words when done with canvas
+    public static void ContentCanvas()
+    {
+        for (int x = 0; x < CanvasContent.titles.Length; x++)
+        {
+            keywords.Add(CanvasContent.titles[x], () =>
+            {
+                Debug.Log(CanvasContent.titles[x]);
+                var focusedObject = LocationManager.Instance.FocusedObject;
+                if (focusedObject != null)
+                {
+                    focusedObject.SendMessage("OnContent", CanvasContent.titles[x], SendMessageOptions.DontRequireReceiver);
+                    Debug.Log(CanvasContent.titles[x]);
+                }
+            });
         }
     }
 }

@@ -18,6 +18,12 @@ public class OpenDocument : MonoBehaviour
     }
     void OnOpenDocument()
     {
+        //ensure no other document is open
+        GameObject[] gameObjects = GameObject.FindGameObjectsWithTag("interactible");
+        for(var i = 0; i < gameObjects.Length; i++)
+        {
+            Destroy(gameObjects[i]);
+        }
         Debug.Log("open document");
         GameObject info = Instantiate(infoDoc, new Vector3(0, 0, 2), Quaternion.identity) as GameObject;
         info.transform.parent = GameObject.Find("GameManager").transform;
