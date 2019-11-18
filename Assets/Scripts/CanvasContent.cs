@@ -63,6 +63,7 @@ public class CanvasContent : MonoBehaviour
     }
     void OnContent(string buttonName)
     {
+        Debug.Log("content accessed");
         Debug.Log(buttonName);
     }
     

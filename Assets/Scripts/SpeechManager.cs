@@ -6,7 +6,8 @@ using UnityEngine.Windows.Speech;
 
 public class SpeechManager : MonoBehaviour
 {
-    private KeywordRecognizer keywordRecognizer = null;
+    private delegate void MyDelegate(int x);
+    private static KeywordRecognizer keywordRecognizer = null;
     private static Dictionary<string, System.Action> keywords = new Dictionary<string, System.Action>();
     
     // Start is called before the first frame update
@@ -63,13 +64,16 @@ public class SpeechManager : MonoBehaviour
         keywordRecognizer.OnPhraseRecognized += KeywordRecognizer_OnPhraseRecognized;
         keywordRecognizer.Start();
     }
+    void test(int x)
+    {
 
+    }
     // Update is called once per frame
     void Update()
     {
         
     }
-    private void KeywordRecognizer_OnPhraseRecognized(PhraseRecognizedEventArgs args)
+    private static void KeywordRecognizer_OnPhraseRecognized(PhraseRecognizedEventArgs args)
     {
         System.Action keywordAction;
         if (keywords.TryGetValue(args.text, out keywordAction))
@@ -80,18 +84,32 @@ public class SpeechManager : MonoBehaviour
     //dont forget to delete words when done with canvas
     public static void ContentCanvas()
     {
+
+        Debug.Log("contentcanvas initialized");
         for (int x = 0; x < CanvasContent.titles.Length; x++)
         {
-            keywords.Add(CanvasContent.titles[x], () =>
+            keywords.Add("view " + CanvasContent.titles[x], () =>
             {
-                Debug.Log(CanvasContent.titles[x]);
-                var focusedObject = LocationManager.Instance.FocusedObject;
+                GameObject focusedObject = LocationManager.Instance.FocusedObject;
                 if (focusedObject != null)
                 {
-                    focusedObject.SendMessage("OnContent", CanvasContent.titles[x], SendMessageOptions.DontRequireReceiver);
-                    Debug.Log(CanvasContent.titles[x]);
+                    focusedObject.SendMessage("OnContent", "Working progress" , SendMessageOptions.DontRequireReceiver);
+                    //Debug.Log(CanvasContent.titles[x]);
                 }
             });
         }
+        
+        foreach (string key in keywords.Keys)
+        {
+            Debug.Log(key);
+        }
+        keywordRecognizer.Dispose();
+        keywordRecognizer = new KeywordRecognizer(keywords.Keys.ToArray());
+
+        // Register a callback for the KeywordRecognizer and start recognizing!
+        keywordRecognizer.OnPhraseRecognized += KeywordRecognizer_OnPhraseRecognized;
+        keywordRecognizer.Start();
+        //Debug.Log(CanvasContent.titles.Length);
+
     }
 }
