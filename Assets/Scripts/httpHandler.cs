@@ -6,30 +6,37 @@ using UnityEngine.UI;
 using SimpleJSON;
 using System.Collections.Generic;
 
-/* Note: the QR code will have to be the name attribute
- * 
+/* 
+ * Note: the QR code will have to be the name attribute right now for it to work
  */
-public class httpHandler : MonoBehaviour
-{
-    //list of all RootObjects for one pop up canvas
-    ArrayList slideList = new ArrayList();
 
-    public 
-    // Start is called before the first frame update
+public class HttpHandler : MonoBehaviour
+{
+    //test serializefields
+    [SerializeField]
+    public RawImage rawImg;
+    [SerializeField]
+    public AudioSource audioSource;
+
+    //variables to save data from request 
+    public AudioClip audioClip;
+    public Texture texture;
+
+    //list of all RootObjects for one pop up canvas
+    List<RootObject> slideList = new List<RootObject>();
+
     void Start()
     {
-        //StartCoroutine(GetRequest("https://us-central1-hololens-serverless.cloudfunctions.net/getAllItems"));
         StartCoroutine(PostRequest("name", "Hololens"));
     }
 
-    // Update is called once per frame
     void Update()
     {
         
     }
 
     /* PostRequest:
-     * Gets all items from database by name as a json object, saves the data members in RootObjects, and updates slideList
+     * Gets all items from database by name as a json object, saves the data members in RootObjects, and updates slideList list
      */
     IEnumerator PostRequest(string fieldName1, string fieldValue1)
     {
@@ -43,6 +50,7 @@ public class httpHandler : MonoBehaviour
             if (www.isNetworkError || www.isHttpError)
             {
                 Debug.Log(www.error);
+                yield return null;
             }
             else
             {
@@ -54,12 +62,11 @@ public class httpHandler : MonoBehaviour
                 var id = parsedJSON[3]["id"].Value;
 
                 int i = 0;
-                //don't know how to get the total size so just check if the next entry is an empty string
+                //don't know how to get the total list size so just check if the next entry is an empty string
+                //might wanna change json structure later
                 while(!(parsedJSON[i]["id"].Value.Equals("")))
                 {
                     RootObject r = new RootObject();
-                    RawImage rawImg = new RawImage();
-                    AudioSource audioSource = new AudioSource();
 
                     r.id = parsedJSON[i]["id"].Value;
                     r.name = parsedJSON[i]["name"].Value;
@@ -70,16 +77,26 @@ public class httpHandler : MonoBehaviour
                     r.imgurl = parsedJSON[i]["imgurl"].Value;
                     r.audiourl = parsedJSON[i]["audiourl"].Value;
 
+                    //wait for images and audio to download
+                    yield return StartCoroutine(DownloadImage(r.imgurl, value => r.texture = value));
+                    yield return StartCoroutine(DownloadAudio(r.audiourl, value => r.audioClip = value));
+
+                    r.texture = texture;
+                    r.audioClip = audioClip;
 
                     Debug.Log(r.id);
                     slideList.Add(r);
 
+                    //can probably update the view here?
+
                     i++;
                 }
 
-                
-                
-
+                //testing updating serialized fields
+                rawImg.texture = slideList[0].texture;
+                audioSource.clip = slideList[0].audioClip;
+                Debug.Log(audioSource.clip + " length: " + audioSource.clip.length);
+                audioSource.Play();
             }
         }
     }
@@ -103,33 +120,39 @@ public class httpHandler : MonoBehaviour
         }
     }
 
-        IEnumerator DownloadImage(string MediaUrl, ref RawImage img)
+    /* 
+     * Downloads the image from url to texture
+     */
+    IEnumerator DownloadImage(string MediaUrl, System.Action<Texture2D> result)
     {
         UnityWebRequest request = UnityWebRequestTexture.GetTexture(MediaUrl);
         yield return request.SendWebRequest();
         if (request.isNetworkError || request.isHttpError)
             Debug.Log(request.error);
         else
-            img.texture = ((DownloadHandlerTexture)request.downloadHandler).texture;
+            texture = ((DownloadHandlerTexture)request.downloadHandler).texture;
     }
 
-    IEnumerator PlayAudio(string MediaUrl, ref )
+    /* 
+     * Downloads the audio from url to audioClip
+     */ 
+    IEnumerator DownloadAudio(string MediaUrl, System.Action<AudioClip> result)
     {
-        UnityWebRequest music = UnityWebRequestMultimedia.GetAudioClip(MediaUrl, AudioType.WAV);
-        yield return music.SendWebRequest();
+        UnityWebRequest request = UnityWebRequestMultimedia.GetAudioClip(MediaUrl, AudioType.WAV);
+        yield return request.SendWebRequest();
 
-        if (music.isNetworkError)
+        if (request.isNetworkError)
         {
-            Debug.Log(music.error);
+            Debug.Log(request.error);
         }
         else
         {
-            AudioClip clip = DownloadHandlerAudioClip.GetContent(music);
-            Debug.Log(clip + " length: " + clip.length);
+            AudioClip clip = DownloadHandlerAudioClip.GetContent(request);
+            //Debug.Log(clip + " length: " + clip.length);
             if (clip)
             {
-                audioSource.clip = clip;
-                audioSource.Play();
+                audioClip = clip;
+                //audioSource.Play();
             }
         }
     }

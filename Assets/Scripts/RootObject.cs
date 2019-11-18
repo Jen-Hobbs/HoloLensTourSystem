@@ -12,6 +12,6 @@ public class RootObject
     public string imgurl { get; set; }
     public string audiourl { get; set; }
 
-    public RawImage rawImg { get; set; }
-    public AudioSource audioSource { get; set; }
+    public Texture texture { get; set; }
+    public AudioClip audioClip { get; set; }
 }
