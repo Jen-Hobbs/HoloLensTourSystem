@@ -6,25 +6,41 @@ using System.Linq;
 using System;
 using UnityEngine.UI;
 using System.Runtime.InteropServices;
+using Microsoft.MixedReality.Toolkit;
+using UnityEngine.XR.WSA.Input;
+using Microsoft.MixedReality.Toolkit.Input;
+using UnityEngine.Networking;
 
-public class QRCodeScanner : MonoBehaviour
+/**
+ * Creater : Joe
+ * Date : 11/17/2019
+ * 
+ * Description : 
+ * This script is to take photos when a user takes a gesture (tap) - method: OnInputDown()
+ * and processe  the image for decoding QR code                    - method: decodeQR()
+ * If it is successfully decoded, the returned data would be url,
+ * and it sends request for image using the image url               - method: DownloadImage()
+ * and it sends request for audio file using the audio url          - method: PlayAudio() {disabled for now}
+ * 
+ * P.S : the url is hardcoded now (will be modified later, based on the completion of web admin)
+ */
+
+public class QRCodeScanner : MonoBehaviour, IMixedRealityInputHandler
 {
+    Resolution cameraResolution;
     PhotoCapture photoCaptureObject = null;
-    Texture2D screenCaptureTexture = null;
-    Texture2D croppedQR;
-    int cameraWidth;
-    int cameraHeight;
-
+    Texture2D capturedObj = null;
+    public AudioSource audioSource;
     public Text textbox1;
+    public Shader sh;
 
     void Start()
     {
-        Resolution cameraResolution = PhotoCapture.SupportedResolutions.OrderByDescending((res) => res.width * res.height).First();
-        cameraWidth = cameraResolution.width;
-        cameraHeight = cameraResolution.height;
+        cameraResolution = PhotoCapture.SupportedResolutions.OrderByDescending((res) => res.width * res.height).First();
+        audioSource.Stop();
+        capturedObj = new Texture2D(cameraResolution.width, cameraResolution.height);
 
-        screenCaptureTexture = new Texture2D(cameraWidth, cameraHeight);
-
+        // create PhotoCapture object
         PhotoCapture.CreateAsync(false, delegate (PhotoCapture captureObject)
         {
             photoCaptureObject = captureObject;
@@ -34,37 +50,85 @@ public class QRCodeScanner : MonoBehaviour
             cameraParameters.cameraResolutionHeight = cameraResolution.height;
             cameraParameters.pixelFormat = CapturePixelFormat.BGRA32;
 
-            photoCaptureObject.StartPhotoModeAsync(cameraParameters, delegate (PhotoCapture.PhotoCaptureResult result)
-            {
-                StartCoroutine(WaitAndPrint());
-            });
+            photoCaptureObject.StartPhotoModeAsync(cameraParameters, delegate (PhotoCapture.PhotoCaptureResult result) { });
         });
     }
 
     void OnCapturedPhotoToMemory(PhotoCapture.PhotoCaptureResult result, PhotoCaptureFrame photoCaptureFrame)
     {
-        photoCaptureFrame.UploadImageDataToTexture(screenCaptureTexture);
+        photoCaptureFrame.UploadImageDataToTexture(capturedObj);
     }
 
-    private IEnumerator WaitAndPrint()
+    IEnumerator waiter(float sec)
     {
-        while (true)
+        yield return new WaitForSeconds(sec);
+    }
+
+    // receives an image from url and displays the image 
+    IEnumerator DownloadImage(string MediaUrl)
+    {
+        UnityWebRequest request = UnityWebRequestTexture.GetTexture(MediaUrl);
+        yield return request.SendWebRequest();
+        if (request.isNetworkError || request.isHttpError)
+            Debug.Log(request.error);
+        else
         {
-            photoCaptureObject.TakePhotoAsync(OnCapturedPhotoToMemory);
-            yield return new WaitForSeconds(0.5f);
+            // create a quad and place the received image on it.
+            GameObject quad = GameObject.CreatePrimitive(PrimitiveType.Quad);
+            Renderer quadRenderer = quad.GetComponent<Renderer>() as Renderer;
+            quadRenderer.material = new Material(sh);
 
-            Color[] c = screenCaptureTexture.GetPixels(0, 0, cameraWidth, cameraHeight);
-            croppedQR = new Texture2D(cameraWidth, cameraHeight);
+            Vector3 pos = Camera.main.transform.position + Camera.main.transform.forward * 1.1f;
+            quad.transform.position = new Vector3(pos.x + 0.9f, pos.y, pos.z);
+            quad.transform.LookAt(Camera.main.transform);
+            quad.transform.rotation = Quaternion.LookRotation(quad.transform.position - Camera.main.transform.position);
 
-            croppedQR.SetPixels(c);
-            croppedQR.Apply();
+            quadRenderer.material.SetTexture("_MainTex", ((DownloadHandlerTexture)request.downloadHandler).texture);
 
-            decodeQR(croppedQR);
-            
-            yield return new WaitForSeconds(1.0f);
+            capturedObj = null;
+            capturedObj = new Texture2D(cameraResolution.width, cameraResolution.height);
         }
     }
 
+    // receives an audio from url and plays it 
+    // drawbacks - it takes some time until completing downloading and finishing play
+    IEnumerator PlayAudio(string MediaUrl)
+    {
+        UnityWebRequest music = UnityWebRequestMultimedia.GetAudioClip(MediaUrl, AudioType.WAV);
+        yield return music.SendWebRequest();
+
+        if (music.isNetworkError)
+        {
+            Debug.Log(music.error);
+        }
+        else
+        {
+            AudioClip clip = DownloadHandlerAudioClip.GetContent(music);
+
+            if (clip)
+            {
+                audioSource.clip = clip;
+                audioSource.Play();
+            }
+        }
+
+    }
+
+    // called when user clicked with his finger
+    // takes a photo with hololens camera and tries to decode the image
+    public void OnInputDown(InputEventData eventData)
+    {
+        Debug.Log("OnInputDown(InputEventData eventData)");
+        photoCaptureObject.TakePhotoAsync(OnCapturedPhotoToMemory);
+        StartCoroutine(waiter(0.5f));
+        decodeQR(capturedObj);
+    }
+
+    // where decoding process occurs
+    // if qr code is decoded successfully,
+    // it processes the decoded data.
+    // The decoded data would be url.
+    // But I used just hardcoded url for now.
     void decodeQR(Texture2D qrToDecode)
     {
         if (qrToDecode != null)
@@ -75,18 +139,27 @@ public class QRCodeScanner : MonoBehaviour
             resultStr = ZxingUwp.Barcode.Read(byteArr, qrToDecode.width, qrToDecode.height);
 #endif
             textbox1.text = resultStr;
+
+            if (resultStr == "null")
+            {
+                /* failed to decode QR code */
+            }
+            else
+            {
+                /* succeeded to decode QR code */
+
+                // receive an image from url and display the image 
+                StartCoroutine(DownloadImage("https://randomuser.me/api/portraits/med/women/11.jpg"));
+
+                // receive an audio from url and play 
+                // but disabled for now due to time needed until fully retrieve data and the end of play time
+                // StartCoroutine(PlayAudio("https://www.kozco.com/tech/piano2.wav"));
+            }
         }
     }
 
-    void OnDestroy()
+    public void OnInputUp(InputEventData eventData)
     {
-        photoCaptureObject.StopPhotoModeAsync(OnStoppedPhotoMode);
-    }
-
-    void OnStoppedPhotoMode(PhotoCapture.PhotoCaptureResult result)
-    {
-        photoCaptureObject.Dispose();
-        photoCaptureObject = null;
     }
     private static byte[] ProcessColor32(Color32[] colors)
     {
