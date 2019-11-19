@@ -28,14 +28,14 @@ public class CanvasContent : MonoBehaviour
         titles[4] = "something else";
 
 
-        for(int x = 0; x < titles.Length; x++)
-        {
-            GameObject button = Instantiate(content, new Vector3(buttonX, buttonStartY - (x * buttonYScale), 0), Quaternion.identity) as GameObject;
-            button.transform.SetParent(gameObject.transform.parent.transform,false);
-            button.GetComponentInChildren<TextMeshProUGUI>().text = titles[x];
-        }
+     //   for(int x = 0; x < titles.Length; x++)
+      //  {
+     //       GameObject button = Instantiate(content, new Vector3(buttonX, buttonStartY - (x * buttonYScale), 0), Quaternion.identity) as GameObject;
+     //       button.transform.SetParent(gameObject.transform.parent.transform,false);
+     //       button.GetComponentInChildren<TextMeshProUGUI>().text = titles[x];
+     //   }
         Debug.Log("canvas adding keywords");
-        SpeechManager.ContentCanvas();
+        //SpeechManager.ContentCanvas();
         Debug.Log("Next Page Script Started");
     }
 

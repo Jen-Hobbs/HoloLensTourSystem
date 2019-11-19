@@ -33,7 +33,8 @@ public class QRCodeScanner : MonoBehaviour, IMixedRealityInputHandler
     public AudioSource audioSource;
     public Text textbox1;
     public Shader sh;
-
+    public GameObject infoDoc;
+    private bool qrAvailable = false;
     void Start()
     {
         cameraResolution = PhotoCapture.SupportedResolutions.OrderByDescending((res) => res.width * res.height).First();
@@ -53,6 +54,7 @@ public class QRCodeScanner : MonoBehaviour, IMixedRealityInputHandler
             photoCaptureObject.StartPhotoModeAsync(cameraParameters, delegate (PhotoCapture.PhotoCaptureResult result) { });
         });
     }
+
 
     void OnCapturedPhotoToMemory(PhotoCapture.PhotoCaptureResult result, PhotoCaptureFrame photoCaptureFrame)
     {
@@ -146,15 +148,38 @@ public class QRCodeScanner : MonoBehaviour, IMixedRealityInputHandler
             }
             else
             {
+                //qrAvailable = true;
+                GameObject info = Instantiate(infoDoc, new Vector3(0, 0, 2), Quaternion.identity) as GameObject;
+                info.transform.parent = GameObject.Find("GameManager").transform;
                 /* succeeded to decode QR code */
 
                 // receive an image from url and display the image 
-                StartCoroutine(DownloadImage("https://randomuser.me/api/portraits/med/women/11.jpg"));
+                //StartCoroutine(DownloadImage("https://homepages.cae.wisc.edu/~ece533/images/frymire.png"));
 
                 // receive an audio from url and play 
                 // but disabled for now due to time needed until fully retrieve data and the end of play time
                 // StartCoroutine(PlayAudio("https://www.kozco.com/tech/piano2.wav"));
             }
+        }
+    }
+    void OnOpenDocument()
+    {
+        if (qrAvailable == true)
+        {
+            //ensure no other document is open
+            GameObject[] gameObjects = GameObject.FindGameObjectsWithTag("interactible");
+            for (var i = 0; i < gameObjects.Length; i++)
+            {
+                Destroy(gameObjects[i]);
+            }
+            Debug.Log("open document");
+            GameObject info = Instantiate(infoDoc, new Vector3(0, 0, 2), Quaternion.identity) as GameObject;
+            info.transform.parent = GameObject.Find("GameManager").transform;
+            qrAvailable = false;
+        }
+        else
+        {
+            Debug.Log("qr code not available");
         }
     }
 
