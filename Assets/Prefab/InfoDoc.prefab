@@ -1099,14 +1099,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80712aa9d90c58c4785647ffb218338e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  docImage: {fileID: 0}
+  docImage: {fileID: 8700838494961070576}
   textInfo: {fileID: 8700838495100547058}
-  NextSprite: {fileID: 0}
-  PreviousSprite: {fileID: 0}
   title: {fileID: 8700838495335011056}
   audioClip: {fileID: 0}
   texture: {fileID: 0}
-  isReady: 0
 --- !u!1 &8700838495873528898
 GameObject:
   m_ObjectHideFlags: 0
