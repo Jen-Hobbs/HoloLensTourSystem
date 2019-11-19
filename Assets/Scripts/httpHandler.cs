@@ -31,13 +31,12 @@ public class HttpHandler : MonoBehaviour
 
     void Start()
     {
-        StartCoroutine(PostRequest("name", "Hololens"));
         currentSlide = 0;
     }
 
-    void Update()
+    public void postReq(string str1, string str2)
     {
-        
+        StartCoroutine(PostRequest(str1, str2));
     }
 
     /* PostRequest:
