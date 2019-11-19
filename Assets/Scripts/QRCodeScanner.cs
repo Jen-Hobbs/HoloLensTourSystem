@@ -29,7 +29,6 @@ public class QRCodeScanner : MonoBehaviour, IMixedRealityInputHandler
 {
     Resolution cameraResolution;
     PhotoCapture photoCaptureObject = null;
-    Texture2D capturedObj = null;
     public AudioSource audioSource;
     public Text textbox1;
     public Shader sh;
@@ -39,7 +38,6 @@ public class QRCodeScanner : MonoBehaviour, IMixedRealityInputHandler
     {
         cameraResolution = PhotoCapture.SupportedResolutions.OrderByDescending((res) => res.width * res.height).First();
         audioSource.Stop();
-        capturedObj = new Texture2D(cameraResolution.width, cameraResolution.height);
 
         // create PhotoCapture object
         PhotoCapture.CreateAsync(false, delegate (PhotoCapture captureObject)
@@ -58,110 +56,39 @@ public class QRCodeScanner : MonoBehaviour, IMixedRealityInputHandler
 
     void OnCapturedPhotoToMemory(PhotoCapture.PhotoCaptureResult result, PhotoCaptureFrame photoCaptureFrame)
     {
-        photoCaptureFrame.UploadImageDataToTexture(capturedObj);
-    }
+        List<byte> imageBufferList = new List<byte>();
 
-    IEnumerator waiter(float sec)
-    {
-        yield return new WaitForSeconds(sec);
-    }
+        photoCaptureFrame.CopyRawImageDataIntoBuffer(imageBufferList);
 
-    // receives an image from url and displays the image 
-    IEnumerator DownloadImage(string MediaUrl)
-    {
-        UnityWebRequest request = UnityWebRequestTexture.GetTexture(MediaUrl);
-        yield return request.SendWebRequest();
-        if (request.isNetworkError || request.isHttpError)
-            Debug.Log(request.error);
-        else
+        string resultStr = "";
+        byte[] byteArr = imageBufferList.ToArray();
+#if !UNITY_EDITOR
+            resultStr = ZxingUwp.Barcode.Read(byteArr, cameraResolution.width, cameraResolution.height);
+#endif
+        textbox1.text = resultStr;
+
+        if (resultStr == "null")
         {
-            // create a quad and place the received image on it.
-            GameObject quad = GameObject.CreatePrimitive(PrimitiveType.Quad);
-            Renderer quadRenderer = quad.GetComponent<Renderer>() as Renderer;
-            quadRenderer.material = new Material(sh);
-
-            Vector3 pos = Camera.main.transform.position + Camera.main.transform.forward * 1.1f;
-            quad.transform.position = new Vector3(pos.x + 0.9f, pos.y, pos.z);
-            quad.transform.LookAt(Camera.main.transform);
-            quad.transform.rotation = Quaternion.LookRotation(quad.transform.position - Camera.main.transform.position);
-
-            quadRenderer.material.SetTexture("_MainTex", ((DownloadHandlerTexture)request.downloadHandler).texture);
-
-            capturedObj = null;
-            capturedObj = new Texture2D(cameraResolution.width, cameraResolution.height);
-        }
-    }
-
-    // receives an audio from url and plays it 
-    // drawbacks - it takes some time until completing downloading and finishing play
-    IEnumerator PlayAudio(string MediaUrl)
-    {
-        UnityWebRequest music = UnityWebRequestMultimedia.GetAudioClip(MediaUrl, AudioType.WAV);
-        yield return music.SendWebRequest();
-
-        if (music.isNetworkError)
-        {
-            Debug.Log(music.error);
+            /* failed to decode QR code */
         }
         else
         {
-            AudioClip clip = DownloadHandlerAudioClip.GetContent(music);
-
-            if (clip)
-            {
-                audioSource.clip = clip;
-                audioSource.Play();
-            }
+            //qrAvailable = true;
+            GameObject info = Instantiate(infoDoc, new Vector3(0, 0, 2), Quaternion.identity) as GameObject;
+            info.transform.parent = GameObject.Find("GameManager").transform;
+            info.GetComponent<HttpHandler>().postReq("name", resultStr);
+            /* succeeded to decode QR code */
         }
-
     }
 
     // called when user clicked with his finger
     // takes a photo with hololens camera and tries to decode the image
     public void OnInputDown(InputEventData eventData)
     {
-        Debug.Log("OnInputDown(InputEventData eventData)");
+        // Debug.Log("OnInputDown(InputEventData eventData)");
         photoCaptureObject.TakePhotoAsync(OnCapturedPhotoToMemory);
-        StartCoroutine(waiter(0.5f));
-        decodeQR(capturedObj);
     }
 
-    // where decoding process occurs
-    // if qr code is decoded successfully,
-    // it processes the decoded data.
-    // The decoded data would be url.
-    // But I used just hardcoded url for now.
-    void decodeQR(Texture2D qrToDecode)
-    {
-        if (qrToDecode != null)
-        {
-            string resultStr = "";
-            byte[] byteArr = ProcessColor32(qrToDecode.GetPixels32());
-#if !UNITY_EDITOR
-            resultStr = ZxingUwp.Barcode.Read(byteArr, qrToDecode.width, qrToDecode.height);
-#endif
-            textbox1.text = resultStr;
-
-            if (resultStr == "null")
-            {
-                /* failed to decode QR code */
-            }
-            else
-            {
-                //qrAvailable = true;
-                GameObject info = Instantiate(infoDoc, new Vector3(0, 0, 2), Quaternion.identity) as GameObject;
-                info.transform.parent = GameObject.Find("GameManager").transform;
-                /* succeeded to decode QR code */
-
-                // receive an image from url and display the image 
-                //StartCoroutine(DownloadImage("https://homepages.cae.wisc.edu/~ece533/images/frymire.png"));
-
-                // receive an audio from url and play 
-                // but disabled for now due to time needed until fully retrieve data and the end of play time
-                // StartCoroutine(PlayAudio("https://www.kozco.com/tech/piano2.wav"));
-            }
-        }
-    }
     void OnOpenDocument()
     {
         if (qrAvailable == true)
@@ -185,29 +112,5 @@ public class QRCodeScanner : MonoBehaviour, IMixedRealityInputHandler
 
     public void OnInputUp(InputEventData eventData)
     {
-    }
-    private static byte[] ProcessColor32(Color32[] colors)
-    {
-        if (colors == null || colors.Length == 0)
-            return null;
-
-        int lengthOfColor32 = Marshal.SizeOf(typeof(Color32));
-        int length = lengthOfColor32 * colors.Length;
-        byte[] bytes = new byte[length];
-
-        GCHandle handle = default(GCHandle);
-        try
-        {
-            handle = GCHandle.Alloc(colors, GCHandleType.Pinned);
-            IntPtr ptr = handle.AddrOfPinnedObject();
-            Marshal.Copy(ptr, bytes, 0, length);
-        }
-        finally
-        {
-            if (handle != default(GCHandle))
-                handle.Free();
-        }
-
-        return bytes;
     }
 }
