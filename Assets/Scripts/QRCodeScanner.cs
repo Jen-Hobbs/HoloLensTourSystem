@@ -34,6 +34,7 @@ public class QRCodeScanner : MonoBehaviour, IMixedRealityInputHandler
     public Shader sh;
     public GameObject infoDoc;
     private bool qrAvailable = false;
+
     void Start()
     {
         cameraResolution = PhotoCapture.SupportedResolutions.OrderByDescending((res) => res.width * res.height).First();
