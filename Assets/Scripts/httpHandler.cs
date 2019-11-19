@@ -1,9 +1,9 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
 using SimpleJSON;
+using TMPro;
 using System.Collections.Generic;
 
 /* 
@@ -12,18 +12,20 @@ using System.Collections.Generic;
 
 public class HttpHandler : MonoBehaviour
 {
-    //test serializefields
-    [SerializeField]
-    public RawImage rawImg;
-    [SerializeField]
-    public AudioSource audioSource;
+    public GameObject docImage;
+    public TextMeshProUGUI textInfo;
+    public Sprite NextSprite;
+    public Sprite PreviousSprite;
+    public TextMeshProUGUI title;
+
 
     //variables to save data from request 
     public AudioClip audioClip;
     public Texture texture;
 
+    public bool isReady =  false;
     //list of all RootObjects for one pop up canvas
-    List<RootObject> slideList = new List<RootObject>();
+    public List<RootObject> slideList =  new List<RootObject>();
 
     void Start()
     {
@@ -38,7 +40,7 @@ public class HttpHandler : MonoBehaviour
     /* PostRequest:
      * Gets all items from database by name as a json object, saves the data members in RootObjects, and updates slideList list
      */
-    IEnumerator PostRequest(string fieldName1, string fieldValue1)
+    public IEnumerator PostRequest(string fieldName1, string fieldValue1)
     {
         WWWForm form = new WWWForm();
         form.AddField(fieldName1, fieldValue1);
@@ -83,25 +85,31 @@ public class HttpHandler : MonoBehaviour
 
                     r.texture = texture;
                     r.audioClip = audioClip;
-
                     Debug.Log(r.id);
                     slideList.Add(r);
 
                     //can probably update the view here?
+                    if(i == 0)
+                    {
+                        ShowSlide(0);
+                        //GetComponent<CanvasContent>().help();
+
+                        //update the first page if it is ready
+                    }
 
                     i++;
                 }
 
                 //testing updating serialized fields
-                rawImg.texture = slideList[0].texture;
-                audioSource.clip = slideList[0].audioClip;
-                Debug.Log(audioSource.clip + " length: " + audioSource.clip.length);
-                audioSource.Play();
+                //rawImg.texture = slideList[0].texture;
+                //audioSource.clip = slideList[0].audioClip;
+                //Debug.Log(audioSource.clip + " length: " + audioSource.clip.length);
+                //audioSource.Play();
             }
         }
     }
 
-    IEnumerator GetRequest(string uri)
+    public IEnumerator GetRequest(string uri)
     {
         using (UnityWebRequest webRequest = UnityWebRequest.Get(uri))
         {
@@ -123,7 +131,7 @@ public class HttpHandler : MonoBehaviour
     /* 
      * Downloads the image from url to texture
      */
-    IEnumerator DownloadImage(string MediaUrl, System.Action<Texture2D> result)
+    public IEnumerator DownloadImage(string MediaUrl, System.Action<Texture2D> result)
     {
         UnityWebRequest request = UnityWebRequestTexture.GetTexture(MediaUrl);
         yield return request.SendWebRequest();
@@ -135,8 +143,8 @@ public class HttpHandler : MonoBehaviour
 
     /* 
      * Downloads the audio from url to audioClip
-     */ 
-    IEnumerator DownloadAudio(string MediaUrl, System.Action<AudioClip> result)
+     */
+    public IEnumerator DownloadAudio(string MediaUrl, System.Action<AudioClip> result)
     {
         UnityWebRequest request = UnityWebRequestMultimedia.GetAudioClip(MediaUrl, AudioType.WAV);
         yield return request.SendWebRequest();
@@ -155,6 +163,22 @@ public class HttpHandler : MonoBehaviour
                 //audioSource.Play();
             }
         }
+    }
+
+    public void ShowSlide(int slideNumber)
+    {
+        textInfo.text = slideList[slideNumber].text;
+        title.text = slideList[slideNumber].title;
+    }
+
+    public void OnNextPage(int currentSlideNumber)
+    {
+        ShowSlide(currentSlideNumber + 1);
+    }
+
+    public void OnPreviousPage(int currentSlideNumber)
+    {
+        ShowSlide(currentSlideNumber - 1);
     }
 }
 
