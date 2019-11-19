@@ -32,6 +32,10 @@ public class HttpHandler : MonoBehaviour
     void Start()
     {
         currentSlide = 0;
+        Debug.Log("start starded");
+        Debug.Log("textInfo" + textInfo.text);
+        
+        //StartCoroutine(PostRequest("name", "Hololens"));
     }
 
     public void postReq(string str1, string str2)
@@ -44,6 +48,7 @@ public class HttpHandler : MonoBehaviour
      */
     public IEnumerator PostRequest(string fieldName1, string fieldValue1)
     {
+        
         WWWForm form = new WWWForm();
         form.AddField(fieldName1, fieldValue1);
 
@@ -70,6 +75,7 @@ public class HttpHandler : MonoBehaviour
                 //might wanna change json structure later
                 while(!(parsedJSON[i]["id"].Value.Equals("")))
                 {
+                    Debug.Log("parsed jason");
                     RootObject r = new RootObject();
 
                     r.id = parsedJSON[i]["id"].Value;
@@ -89,7 +95,7 @@ public class HttpHandler : MonoBehaviour
                     r.audioClip = audioClip;
                     Debug.Log(r.id);
                     slideList.Add(r);
-
+                    Debug.Log("testing" + r.title);
                     //if the first item is done, we can show the view :) 
                     if(i == 0)
                     {
@@ -99,6 +105,7 @@ public class HttpHandler : MonoBehaviour
 
                     i++;
                 }
+                Debug.Log("count" + slideList.Count);
                 numberOfSlides = slideList.Count;
 
                 //testing updating serialized fields
@@ -173,6 +180,8 @@ public class HttpHandler : MonoBehaviour
     {
         Debug.Log("currentSlide:" + currentSlide);
         Debug.Log("slideNumber:" + slideNumber);
+        Debug.Log("testing" + slideList[slideNumber].text);
+        Debug.Log("text box available" + textInfo.text);
         textInfo.text = slideList[slideNumber].text;
         title.text = slideList[slideNumber].title;
 
