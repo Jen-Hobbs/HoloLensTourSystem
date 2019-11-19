@@ -1330,14 +1330,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80712aa9d90c58c4785647ffb218338e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  docImage: {fileID: 0}
+  docImage: {fileID: 288688975}
   textInfo: {fileID: 696571213}
-  NextSprite: {fileID: 0}
-  PreviousSprite: {fileID: 0}
   title: {fileID: 1065035855}
   audioClip: {fileID: 0}
   texture: {fileID: 0}
-  isReady: 0
 --- !u!1 &1230082595
 GameObject:
   m_ObjectHideFlags: 0
