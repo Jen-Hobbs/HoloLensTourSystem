@@ -12,24 +12,27 @@ using System.Collections.Generic;
 
 public class HttpHandler : MonoBehaviour
 {
+    //gameObjects to update on canvas
     public GameObject docImage;
     public TextMeshProUGUI textInfo;
-    public Sprite NextSprite;
-    public Sprite PreviousSprite;
     public TextMeshProUGUI title;
-
 
     //variables to save data from request 
     public AudioClip audioClip;
     public Texture texture;
+    // instance variables
+    private int numberOfSlides;
+    private int currentSlide;
 
-    public bool isReady =  false;
     //list of all RootObjects for one pop up canvas
     public List<RootObject> slideList =  new List<RootObject>();
+
+
 
     void Start()
     {
         StartCoroutine(PostRequest("name", "Hololens"));
+        currentSlide = 0;
     }
 
     void Update()
@@ -88,27 +91,29 @@ public class HttpHandler : MonoBehaviour
                     Debug.Log(r.id);
                     slideList.Add(r);
 
-                    //can probably update the view here?
+                    //if the first item is done, we can show the view :) 
                     if(i == 0)
                     {
+                        currentSlide = 0;
                         ShowSlide(0);
-                        //GetComponent<CanvasContent>().help();
-
-                        //update the first page if it is ready
                     }
 
                     i++;
                 }
+                numberOfSlides = slideList.Count;
 
                 //testing updating serialized fields
-                //rawImg.texture = slideList[0].texture;
-                //audioSource.clip = slideList[0].audioClip;
-                //Debug.Log(audioSource.clip + " length: " + audioSource.clip.length);
-                //audioSource.Play();
+                    //rawImg.texture = slideList[0].texture;
+                    //audioSource.clip = slideList[0].audioClip;
+                    //Debug.Log(audioSource.clip + " length: " + audioSource.clip.length);
+                    //audioSource.Play();
             }
         }
     }
 
+    /* GetRequest:
+     * Gets all items from database with GET
+     */
     public IEnumerator GetRequest(string uri)
     {
         using (UnityWebRequest webRequest = UnityWebRequest.Get(uri))
@@ -167,18 +172,40 @@ public class HttpHandler : MonoBehaviour
 
     public void ShowSlide(int slideNumber)
     {
+        Debug.Log("currentSlide:" + currentSlide);
+        Debug.Log("slideNumber:" + slideNumber);
         textInfo.text = slideList[slideNumber].text;
         title.text = slideList[slideNumber].title;
+
+        //make texture into sprite programmatically
+        Texture2D tex = (Texture2D) slideList[slideNumber].texture;
+        Sprite sprite = Sprite.Create(tex, new Rect(0.0f, 0.0f, tex.width, tex.height), new Vector2(0.5f, 0.5f), 100.0f);
+        docImage.GetComponent<Image>().sprite = sprite;
     }
 
-    public void OnNextPage(int currentSlideNumber)
+    void OnNextPage()
     {
-        ShowSlide(currentSlideNumber + 1);
+        //check if its the last page. If it is, go back to first page
+        if(currentSlide == numberOfSlides-1)
+        {
+            ShowSlide(0);
+        } else
+        {
+            ShowSlide(currentSlide + 1);
+        }  
     }
 
-    public void OnPreviousPage(int currentSlideNumber)
+    void OnPreviousPage()
     {
-        ShowSlide(currentSlideNumber - 1);
+        //check if its the first page. If it is, do nothing.
+        if (currentSlide == numberOfSlides - 1)
+        {
+         
+        }
+        else
+        {
+            ShowSlide(currentSlide - 1);
+        }
     }
 }
 
