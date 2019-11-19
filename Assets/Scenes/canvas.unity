@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.3731193, g: 0.38073996, b: 0.35872698, a: 1}
+  m_IndirectSpecularColor: {r: 0.37311947, g: 0.38074005, b: 0.35872722, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -500,7 +500,6 @@ GameObject:
   - component: {fileID: 464754226}
   - component: {fileID: 464754225}
   - component: {fileID: 464754228}
-  - component: {fileID: 464754227}
   m_Layer: 5
   m_Name: Image
   m_TagString: Untagged
@@ -562,23 +561,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 464754223}
   m_CullTransparentMesh: 0
---- !u!114 &464754227
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 464754223}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f3b14722efc59e8478bdcd38528e3379, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  docImage: {fileID: 288688975}
-  textInfo: {fileID: 696571213}
-  NextSprite: {fileID: 10911, guid: 0000000000000000f000000000000000, type: 0}
-  PreviousSprite: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
-  title: {fileID: 1065035855}
 --- !u!65 &464754228
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1230,6 +1212,7 @@ GameObject:
   - component: {fileID: 1176776312}
   - component: {fileID: 1176776311}
   - component: {fileID: 1176776315}
+  - component: {fileID: 1176776317}
   m_Layer: 5
   m_Name: InfoDoc
   m_TagString: Untagged
@@ -1335,6 +1318,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff4e3b9019304b5aaec5664de0778d21, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1176776317
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1176776310}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80712aa9d90c58c4785647ffb218338e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  docImage: {fileID: 288688975}
+  textInfo: {fileID: 696571213}
+  title: {fileID: 1065035855}
+  audioClip: {fileID: 0}
+  texture: {fileID: 0}
 --- !u!1 &1230082595
 GameObject:
   m_ObjectHideFlags: 0
