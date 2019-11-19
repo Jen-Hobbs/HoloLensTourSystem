@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 8700838494868892813}
   - component: {fileID: 8700838494868892814}
   - component: {fileID: 8700838494868892811}
-  - component: {fileID: 8700838494868892812}
   m_Layer: 5
   m_Name: Image
   m_TagString: Untagged
@@ -87,23 +86,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 200, y: 150, z: 0.1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &8700838494868892812
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8700838494868892816}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f3b14722efc59e8478bdcd38528e3379, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  docImage: {fileID: 8700838494961070576}
-  textInfo: {fileID: 8700838495100547058}
-  NextSprite: {fileID: 10911, guid: 0000000000000000f000000000000000, type: 0}
-  PreviousSprite: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
-  title: {fileID: 8700838495335011056}
 --- !u!1 &8700838494961070576
 GameObject:
   m_ObjectHideFlags: 0
@@ -999,6 +981,7 @@ GameObject:
   - component: {fileID: 8700838495748609223}
   - component: {fileID: 8700838495748609224}
   - component: {fileID: 8700838495748609220}
+  - component: {fileID: 6377624069065345214}
   m_Layer: 5
   m_Name: InfoDoc
   m_TagString: Untagged
@@ -1104,6 +1087,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff4e3b9019304b5aaec5664de0778d21, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &6377624069065345214
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8700838495748609225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80712aa9d90c58c4785647ffb218338e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  docImage: {fileID: 0}
+  textInfo: {fileID: 8700838495100547058}
+  NextSprite: {fileID: 0}
+  PreviousSprite: {fileID: 0}
+  title: {fileID: 8700838495335011056}
+  audioClip: {fileID: 0}
+  texture: {fileID: 0}
+  isReady: 0
 --- !u!1 &8700838495873528898
 GameObject:
   m_ObjectHideFlags: 0
