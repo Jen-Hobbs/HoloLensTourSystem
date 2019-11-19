@@ -37,7 +37,7 @@ public class LocationManager : MonoBehaviour
         }
         else
         {
-            Debug.Log("nothing found");
+            //Debug.Log("nothing found");
         }
     }
 }

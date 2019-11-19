@@ -47,6 +47,5 @@ public class HttpManager : MonoBehaviour
                 audioSource.Play();
             }
         }
-
     }
 }
