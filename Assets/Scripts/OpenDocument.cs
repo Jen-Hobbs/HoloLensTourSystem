@@ -16,6 +16,9 @@ public class OpenDocument : MonoBehaviour
     {
         
     }
+    /// <summary>
+    /// used to test the ability to open a document of an object that has tag interactible
+    /// </summary>
     void OnOpenDocument()
     {
         //ensure no other document is open

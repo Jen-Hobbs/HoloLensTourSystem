@@ -11,6 +11,9 @@ public class SpeechManager : MonoBehaviour
     private static Dictionary<string, System.Action> keywords = new Dictionary<string, System.Action>();
     
     // Start is called before the first frame update
+    /// <summary>
+    /// starts adding keywords to dictionary. When keyword is said the System.Action is done to send a message to a function in another script)
+    /// </summary>
     void Start()
     {
         
@@ -73,6 +76,10 @@ public class SpeechManager : MonoBehaviour
     {
         
     }
+    /// <summary>
+    /// invokes keywords (used from https://docs.microsoft.com/en-us/windows/mixed-reality/holograms-101)
+    /// </summary>
+    /// <param name="args"></param>
     private static void KeywordRecognizer_OnPhraseRecognized(PhraseRecognizedEventArgs args)
     {
         System.Action keywordAction;
@@ -82,6 +89,9 @@ public class SpeechManager : MonoBehaviour
         }
     }
     //dont forget to delete words when done with canvas
+    /// <summary>
+    /// Yet to be implemented but should create words based of the title of each page to go through pages
+    /// </summary>
     public static void ContentCanvas()
     {
 

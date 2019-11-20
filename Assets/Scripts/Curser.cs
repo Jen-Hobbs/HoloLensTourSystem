@@ -9,6 +9,9 @@ public class Curser : MonoBehaviour
     private Vector3 headPosition;
     private Vector3 gazeDirection;
     // Start is called before the first frame update
+    /// <summary>
+    /// creates a mesh renderer of a curser and shows it on screen at all times
+    /// </summary>
     void Start()
     {
         meshRenderer = this.gameObject.GetComponent<MeshRenderer>();

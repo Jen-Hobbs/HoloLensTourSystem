@@ -19,6 +19,9 @@ public class LocationManager : MonoBehaviour
     }
 
     // Update is called once per frame
+    /// <summary>
+    /// sends raycast outwards to see if an object is hit makes it possible to check what is hit to select different objects
+    /// </summary>
     void Update()
     {
         GameObject oldFocusObject = FocusedObject;

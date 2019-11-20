@@ -15,6 +15,9 @@ public class WorldWords : MonoBehaviour
     {
         
     }
+    /// <summary>
+    /// checks if voice is working. Will implement further later
+    /// </summary>
     void OnHelp()
     {
         Debug.Log("voice working");
