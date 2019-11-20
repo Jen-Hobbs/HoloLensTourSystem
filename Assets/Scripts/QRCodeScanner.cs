@@ -16,11 +16,11 @@ using UnityEngine.Networking;
  * Date : 11/17/2019
  * 
  * Description : 
- * This script is to take photos when a user takes a gesture (tap) - method: OnInputDown()
- * and processe  the image for decoding QR code                    - method: decodeQR()
+ * This script is to take photos when a user takes a gesture (tap) 
+ * and processe  the image for decoding QR code                    
  * If it is successfully decoded, the returned data would be url,
- * and it sends request for image using the image url               - method: DownloadImage()
- * and it sends request for audio file using the audio url          - method: PlayAudio() {disabled for now}
+ * and it sends request for image using the image url               
+ * and it sends request for audio file using the audio url          
  * 
  * P.S : the url is hardcoded now (will be modified later, based on the completion of web admin)
  */

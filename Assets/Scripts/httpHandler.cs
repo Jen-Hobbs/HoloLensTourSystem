@@ -6,6 +6,15 @@ using SimpleJSON;
 using TMPro;
 using System.Collections.Generic;
 
+/*
+ * Author: Joanna
+ * Date: 11/17/2019
+ * 
+ * Description: This class handles http calls, parses JSON using the SimpleJSON plugin
+ * and fetches and saves the text, image and audio data into custom objects called RootObject.
+ */
+
+
 /* 
  * Note: the QR code will have to be the name attribute right now for it to work
  */
