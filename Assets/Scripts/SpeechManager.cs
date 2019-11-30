@@ -24,33 +24,35 @@ public class SpeechManager : MonoBehaviour
         });
         keywords.Add("Next Page", () =>
         {
-            var focusedObject = LocationManager.Instance.FocusedObject;
+            //var focusedObject = LocationManager.Instance.FocusedObject;
             Debug.Log("Next page Called");
-            if(focusedObject != null)
-            {
-                focusedObject.SendMessage("OnNextPage", SendMessageOptions.DontRequireReceiver);
-                Debug.Log(focusedObject);
-            }
+            //if(focusedObject != null)
+            //{
+            this.gameObject.transform.Find("InfoDoc(Clone)").SendMessage("OnNextPage", SendMessageOptions.DontRequireReceiver);
+            //focusedObject.SendMessage("OnNextPage", SendMessageOptions.DontRequireReceiver);
+                //Debug.Log(focusedObject);
+            //}
         });
         keywords.Add("Previous Page", () =>
         {
-            var focusedObject = LocationManager.Instance.FocusedObject;
+            //var focusedObject = LocationManager.Instance.FocusedObject;
             Debug.Log("Previous page Called");
-            if (focusedObject != null)
-            {
-                focusedObject.SendMessage("OnPreviousPage", SendMessageOptions.DontRequireReceiver);
-                Debug.Log(focusedObject);
-            }
+            this.gameObject.transform.Find("InfoDoc(Clone)").SendMessage("OnNextPage", SendMessageOptions.DontRequireReceiver);
+            //if (focusedObject != null)
+            //{
+            //focusedObject.SendMessage("OnPreviousPage", SendMessageOptions.DontRequireReceiver);
+            //Debug.Log(focusedObject);
+            //}
         });
-        keywords.Add("Open Document", () =>
-        {
-            var focusedObject = LocationManager.Instance.FocusedObject;
-            if (focusedObject != null)
-            {
-                Debug.Log("open document said");
-                focusedObject.SendMessage("OnOpenDocument", SendMessageOptions.DontRequireReceiver);
-            }
-        });
+        //keywords.Add("Open Document", () =>
+        //{
+        //    var focusedObject = LocationManager.Instance.FocusedObject;
+        //    if (focusedObject != null)
+        //    {
+        //        Debug.Log("open document said");
+        //        focusedObject.SendMessage("OnOpenDocument", SendMessageOptions.DontRequireReceiver);
+        //    }
+        //});
         keywords.Add("Close Document", () =>
         {
             GameObject[] gameObjects = GameObject.FindGameObjectsWithTag("interactible");
