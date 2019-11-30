@@ -17,7 +17,7 @@ public class LocationManager : MonoBehaviour
     {
         Instance = this;
     }
-
+    //Color to change #048FFD
     // Update is called once per frame
     /// <summary>
     /// sends raycast outwards to see if an object is hit makes it possible to check what is hit to select different objects
@@ -30,16 +30,26 @@ public class LocationManager : MonoBehaviour
         gazeDirection = Camera.main.transform.position;
         RaycastHit hitInfo;
         if (Physics.Raycast(headPosition, gazeDirection, out hitInfo)
+
             //&& hitInfo.transform.tag == "interactible"
             )
         {
-            
+            Debug.Log("object Hit");
+            if(hitInfo.transform.tag == "Next Page")
+            {
+                Debug.Log("Next Page button hit");
+            }
+            else if(hitInfo.transform.tag == "Next Page")
+            {
+                Debug.Log("Previous Page button hit");
+            }
             // Debug.Log("curser hit");
             FocusedObject = hitInfo.collider.gameObject;
 
         }
         else
         {
+        
             //Debug.Log("nothing found");
         }
     }

@@ -537,7 +537,7 @@ BoxCollider:
   m_GameObject: {fileID: 2664076811349351066}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Size: {x: 200, y: 150, z: 0.1}
   m_Center: {x: 0, y: 0, z: 0}
@@ -844,6 +844,7 @@ GameObject:
   - component: {fileID: 8516788959366906053}
   - component: {fileID: 8353391687420390438}
   - component: {fileID: 4403931422663989637}
+  - component: {fileID: 2397162505455394037}
   m_Layer: 5
   m_Name: Next Page
   m_TagString: Next Page
@@ -946,6 +947,19 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!65 &2397162505455394037
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5288670798905858397}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 50, y: 15, z: 4}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &6272339400603161529
 GameObject:
   m_ObjectHideFlags: 0
@@ -958,6 +972,7 @@ GameObject:
   - component: {fileID: 8840298039941834317}
   - component: {fileID: 7454473680518317218}
   - component: {fileID: 2307833250323348126}
+  - component: {fileID: 6529315978619884857}
   m_Layer: 5
   m_Name: Previous
   m_TagString: Previous Page
@@ -1060,6 +1075,19 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!65 &6529315978619884857
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6272339400603161529}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 50, y: 15, z: 4}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &7291675313785133568
 GameObject:
   m_ObjectHideFlags: 0

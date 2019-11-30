@@ -86,6 +86,20 @@ public class QRCodeScanner : MonoBehaviour, IMixedRealityInputHandler
     // takes a photo with hololens camera and tries to decode the image
     public void OnInputDown(InputEventData eventData)
     {
+        //GameObject[] gameObjects = GameObject.FindGameObjectsWithTag("Canvas");
+        //for (var i = 0; i < gameObjects.Length; i++)
+        //{
+        //    Destroy(gameObjects[i]);
+        //}
+        //GameObject info = Instantiate(infoDoc, new Vector3(0, 0, 2), Quaternion.identity) as GameObject;
+        //info.transform.parent = GameObject.Find("GameManager").transform;
+        //info.GetComponent<HttpHandler>().postReq("name", "Hololens");
+        // Debug.Log("OnInputDown(InputEventData eventData)");
+        //photoCaptureObject.TakePhotoAsync(OnCapturedPhotoToMemory);
+    }
+    public void runCanvas()
+    {
+        Debug.Log("Run canvas to create document");
         GameObject[] gameObjects = GameObject.FindGameObjectsWithTag("Canvas");
         for (var i = 0; i < gameObjects.Length; i++)
         {
@@ -94,10 +108,7 @@ public class QRCodeScanner : MonoBehaviour, IMixedRealityInputHandler
         GameObject info = Instantiate(infoDoc, new Vector3(0, 0, 2), Quaternion.identity) as GameObject;
         info.transform.parent = GameObject.Find("GameManager").transform;
         info.GetComponent<HttpHandler>().postReq("name", "Hololens");
-        // Debug.Log("OnInputDown(InputEventData eventData)");
-        //photoCaptureObject.TakePhotoAsync(OnCapturedPhotoToMemory);
     }
-
     void OnOpenDocument()
     {
         if (qrAvailable == true)

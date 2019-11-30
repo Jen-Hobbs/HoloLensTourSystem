@@ -37,7 +37,7 @@ public class SpeechManager : MonoBehaviour
         {
             //var focusedObject = LocationManager.Instance.FocusedObject;
             Debug.Log("Previous page Called");
-            this.gameObject.transform.Find("InfoDoc(Clone)").SendMessage("OnNextPage", SendMessageOptions.DontRequireReceiver);
+            this.gameObject.transform.Find("InfoDoc(Clone)").SendMessage("OnPreviousPage", SendMessageOptions.DontRequireReceiver);
             //if (focusedObject != null)
             //{
             //focusedObject.SendMessage("OnPreviousPage", SendMessageOptions.DontRequireReceiver);
