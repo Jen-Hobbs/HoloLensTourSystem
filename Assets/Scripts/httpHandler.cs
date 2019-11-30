@@ -1,10 +1,19 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
 using SimpleJSON;
+using TMPro;
 using System.Collections.Generic;
+
+/*
+ * Author: Joanna
+ * Date: 11/17/2019
+ * 
+ * Description: This class handles http calls, parses JSON using the SimpleJSON plugin
+ * and fetches and saves the text, image and audio data into custom objects called RootObject.
+ */
+
 
 /* 
  * Note: the QR code will have to be the name attribute right now for it to work
@@ -12,34 +21,43 @@ using System.Collections.Generic;
 
 public class HttpHandler : MonoBehaviour
 {
-    //test serializefields
-    [SerializeField]
-    public RawImage rawImg;
-    [SerializeField]
-    public AudioSource audioSource;
+    //gameObjects to update on canvas
+    public GameObject docImage;
+    public TextMeshProUGUI textInfo;
+    public TextMeshProUGUI title;
 
     //variables to save data from request 
     public AudioClip audioClip;
     public Texture texture;
+    // instance variables
+    private int numberOfSlides;
+    private int currentSlide;
 
     //list of all RootObjects for one pop up canvas
-    List<RootObject> slideList = new List<RootObject>();
+    public List<RootObject> slideList =  new List<RootObject>();
+
+
 
     void Start()
     {
-        StartCoroutine(PostRequest("name", "Hololens"));
+        currentSlide = 0;
+        Debug.Log("start starded");
+        Debug.Log("textInfo" + textInfo.text);
+        
+        //StartCoroutine(PostRequest("name", "Hololens"));
     }
 
-    void Update()
+    public void postReq(string str1, string str2)
     {
-        
+        StartCoroutine(PostRequest(str1, str2));
     }
 
     /* PostRequest:
      * Gets all items from database by name as a json object, saves the data members in RootObjects, and updates slideList list
      */
-    IEnumerator PostRequest(string fieldName1, string fieldValue1)
+    public IEnumerator PostRequest(string fieldName1, string fieldValue1)
     {
+        
         WWWForm form = new WWWForm();
         form.AddField(fieldName1, fieldValue1);
 
@@ -66,6 +84,7 @@ public class HttpHandler : MonoBehaviour
                 //might wanna change json structure later
                 while(!(parsedJSON[i]["id"].Value.Equals("")))
                 {
+                    Debug.Log("parsed jason");
                     RootObject r = new RootObject();
 
                     r.id = parsedJSON[i]["id"].Value;
@@ -83,25 +102,34 @@ public class HttpHandler : MonoBehaviour
 
                     r.texture = texture;
                     r.audioClip = audioClip;
-
                     Debug.Log(r.id);
                     slideList.Add(r);
-
-                    //can probably update the view here?
+                    Debug.Log("testing" + r.title);
+                    //if the first item is done, we can show the view :) 
+                    if(i == 0)
+                    {
+                        currentSlide = 0;
+                        ShowSlide(0);
+                    }
 
                     i++;
                 }
+                Debug.Log("count" + slideList.Count);
+                numberOfSlides = slideList.Count;
 
                 //testing updating serialized fields
-                rawImg.texture = slideList[0].texture;
-                audioSource.clip = slideList[0].audioClip;
-                Debug.Log(audioSource.clip + " length: " + audioSource.clip.length);
-                audioSource.Play();
+                    //rawImg.texture = slideList[0].texture;
+                    //audioSource.clip = slideList[0].audioClip;
+                    //Debug.Log(audioSource.clip + " length: " + audioSource.clip.length);
+                    //audioSource.Play();
             }
         }
     }
 
-    IEnumerator GetRequest(string uri)
+    /* GetRequest:
+     * Gets all items from database with GET
+     */
+    public IEnumerator GetRequest(string uri)
     {
         using (UnityWebRequest webRequest = UnityWebRequest.Get(uri))
         {
@@ -123,7 +151,7 @@ public class HttpHandler : MonoBehaviour
     /* 
      * Downloads the image from url to texture
      */
-    IEnumerator DownloadImage(string MediaUrl, System.Action<Texture2D> result)
+    public IEnumerator DownloadImage(string MediaUrl, System.Action<Texture2D> result)
     {
         UnityWebRequest request = UnityWebRequestTexture.GetTexture(MediaUrl);
         yield return request.SendWebRequest();
@@ -135,8 +163,8 @@ public class HttpHandler : MonoBehaviour
 
     /* 
      * Downloads the audio from url to audioClip
-     */ 
-    IEnumerator DownloadAudio(string MediaUrl, System.Action<AudioClip> result)
+     */
+    public IEnumerator DownloadAudio(string MediaUrl, System.Action<AudioClip> result)
     {
         UnityWebRequest request = UnityWebRequestMultimedia.GetAudioClip(MediaUrl, AudioType.WAV);
         yield return request.SendWebRequest();
@@ -154,6 +182,46 @@ public class HttpHandler : MonoBehaviour
                 audioClip = clip;
                 //audioSource.Play();
             }
+        }
+    }
+
+    public void ShowSlide(int slideNumber)
+    {
+        Debug.Log("currentSlide:" + currentSlide);
+        Debug.Log("slideNumber:" + slideNumber);
+        Debug.Log("testing" + slideList[slideNumber].text);
+        Debug.Log("text box available" + textInfo.text);
+        textInfo.text = slideList[slideNumber].text;
+        title.text = slideList[slideNumber].title;
+
+        //make texture into sprite programmatically
+        Texture2D tex = (Texture2D) slideList[slideNumber].texture;
+        Sprite sprite = Sprite.Create(tex, new Rect(0.0f, 0.0f, tex.width, tex.height), new Vector2(0.5f, 0.5f), 100.0f);
+        docImage.GetComponent<Image>().sprite = sprite;
+    }
+
+    void OnNextPage()
+    {
+        //check if its the last page. If it is, go back to first page
+        if(currentSlide == numberOfSlides-1)
+        {
+            ShowSlide(0);
+        } else
+        {
+            ShowSlide(currentSlide + 1);
+        }  
+    }
+
+    void OnPreviousPage()
+    {
+        //check if its the first page. If it is, do nothing.
+        if (currentSlide == numberOfSlides - 1)
+        {
+         
+        }
+        else
+        {
+            ShowSlide(currentSlide - 1);
         }
     }
 }

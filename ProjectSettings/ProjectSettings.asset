@@ -585,7 +585,7 @@ PlayerSettings:
       InternetClientServer: True
       Location: False
       LowLevelDevices: False
-      Microphone: False
+      Microphone: True
       MusicLibrary: True
       Objects3D: False
       OfflineMapsManagement: False

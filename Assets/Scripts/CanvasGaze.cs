@@ -4,13 +4,17 @@ public class CanvasGaze : MonoBehaviour
 {
     private MeshRenderer meshRenderer;
 
-    // Use this for initialization
+    
     void Start()
     {
         // Grab the mesh renderer that's on the same object as this script.
         meshRenderer = this.gameObject.GetComponentInChildren<MeshRenderer>();
     }
-
+    /// <summary>
+    /// content made from https://docs.microsoft.com/en-us/windows/mixed-reality/holograms-101
+    /// gets cameras position and sends raycast based of the persons position to see if it hits an object if it does it shows the mesh
+    /// (will highlight object when fully implemented)
+    /// </summary>
     // Update is called once per frame
     void Update()
     {
