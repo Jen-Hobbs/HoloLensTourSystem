@@ -202,13 +202,17 @@ public class HttpHandler : MonoBehaviour
 
     void OnNextPage()
     {
+        Debug.Log("the number of slides are" + numberOfSlides);
+        Debug.Log("you are currently on slide " + currentSlide);
         //check if its the last page. If it is, go back to first page
         if(currentSlide == numberOfSlides-1)
         {
-            ShowSlide(0);
+            currentSlide = 0;
+            ShowSlide(currentSlide);
         } else
         {
-            ShowSlide(currentSlide + 1);
+            currentSlide += 1;
+            ShowSlide(currentSlide);
         }  
     }
 
@@ -217,11 +221,12 @@ public class HttpHandler : MonoBehaviour
         //check if its the first page. If it is, do nothing.
         if (currentSlide == numberOfSlides - 1)
         {
-         
+            
         }
         else
         {
-            ShowSlide(currentSlide - 1);
+            currentSlide -= 1;
+            ShowSlide(currentSlide);
         }
     }
 }
