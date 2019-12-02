@@ -25,6 +25,7 @@ public class HttpHandler : MonoBehaviour
     public GameObject docImage;
     public TextMeshProUGUI textInfo;
     public TextMeshProUGUI title;
+    public GameObject tableContent;
 
     //variables to save data from request 
     public AudioClip audioClip;
@@ -32,6 +33,9 @@ public class HttpHandler : MonoBehaviour
     // instance variables
     private int numberOfSlides;
     private int currentSlide;
+    private const int buttonX = 30;
+    private const int buttonStartY = 140;
+    private const int buttonYScale = 20;
 
     //list of all RootObjects for one pop up canvas
     public List<RootObject> slideList =  new List<RootObject>();
@@ -110,13 +114,17 @@ public class HttpHandler : MonoBehaviour
                     {
                         currentSlide = 0;
                         ShowSlide(0);
+                        
                     }
 
                     i++;
                 }
                 Debug.Log("count" + slideList.Count);
                 numberOfSlides = slideList.Count;
-
+                if(numberOfSlides > 0)
+                {
+                    ShowContents();
+                }
                 //testing updating serialized fields
                     //rawImg.texture = slideList[0].texture;
                     //audioSource.clip = slideList[0].audioClip;
@@ -199,7 +207,35 @@ public class HttpHandler : MonoBehaviour
         Sprite sprite = Sprite.Create(tex, new Rect(0.0f, 0.0f, tex.width, tex.height), new Vector2(0.5f, 0.5f), 100.0f);
         docImage.GetComponent<Image>().sprite = sprite;
     }
+    void ShowContents()
+    {
+        Debug.Log("show contents");
+        Debug.Log(numberOfSlides);
+        string[] titles = new string[numberOfSlides];
+           for(int x = 0; x < numberOfSlides; x++)
+           {
+                GameObject button = Instantiate(tableContent, new Vector3(buttonX, buttonStartY - (x * buttonYScale), 0), Quaternion.identity) as GameObject;
+                button.name = slideList[x].title;
+                Vector3 scale = button.transform.localScale;
+                Vector3 pos = button.transform.position;
+                button.transform.SetParent(docImage.transform.parent);
+                button.transform.localScale = scale;
+                button.transform.localPosition = new Vector3(buttonX, buttonStartY - (x * buttonYScale), 0);
+                titles[x] = slideList[x].title;
+            if (slideList[x].title.Length > 15)
+                {
+                    string text = slideList[x].title.Substring(0, 15) + "...";
+                    button.GetComponentInChildren<TextMeshProUGUI>().text = text;
+                }
+                else
+                {
+                    button.GetComponentInChildren<TextMeshProUGUI>().text = slideList[x].title;
+                }
+           }
 
+        this.gameObject.GetComponentInParent<CanvasGaze>().addGestures(titles);
+           
+    }
     void OnNextPage()
     {
         Debug.Log("next page called");
@@ -232,6 +268,10 @@ public class HttpHandler : MonoBehaviour
             ShowSlide(currentSlide);
             Debug.Log("previous page loading");
         }
+    }
+    void OnChangeContent(string title)
+    {
+        Debug.Log("title of contents in http handler" + title);
     }
 }
 

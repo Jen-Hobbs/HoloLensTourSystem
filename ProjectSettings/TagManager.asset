@@ -9,6 +9,8 @@ TagManager:
   - Previous Page
   - Canvas
   - Close
+  - DragBar
+  - Conents
   layers:
   - Default
   - TransparentFX

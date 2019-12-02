@@ -35,6 +35,7 @@ public class CanvasGaze : MonoBehaviour
                         Destroy(gameObjects[i]);
                     }
                 }
+                
                
                 
             }
@@ -42,6 +43,34 @@ public class CanvasGaze : MonoBehaviour
             {
                 this.gameObject.transform.Find("Main").SendMessage("runCanvas", SendMessageOptions.DontRequireReceiver);
             }
+        };
+        recognizer.HoldStartedEvent += (source, ray) =>
+        {
+            Debug.Log("hold started");
+            if (focusedObject == this.gameObject.transform.Find("InfoDoc(Clone)").transform.Find("DragBar").gameObject)
+            {
+                Debug.Log("correct thing selected and holding");
+                focusedObject.transform.parent.GetComponent<DragManager>().Move();
+            }
+            else
+            {
+                focusedObject.transform.parent.GetComponent<DragManager>().PlaceCanvas();
+            }
+            
+        };
+        recognizer.HoldCompletedEvent += (source, ray) =>
+        {
+            Debug.Log("hold completed");
+            
+            //if (focusedObject == this.gameObject.transform.Find("InfoDoc(Clone)").transform.Find("DragBar").gameObject)
+            //{
+                focusedObject.transform.parent.GetComponent<DragManager>().PlaceCanvas();
+            //}
+        };
+        recognizer.HoldCanceledEvent += (source, ray) =>
+        {
+            Debug.Log("hold canceled");
+            focusedObject.transform.parent.GetComponent<DragManager>().PlaceCanvas();
         };
         recognizer.StartCapturingGestures();
         // Grab the mesh renderer that's on the same object as this script.
@@ -80,6 +109,17 @@ public class CanvasGaze : MonoBehaviour
                 focusedObject = hitInfo.collider.gameObject;
                 focusedObject.GetComponent<Image>().color = new Color32(4, 143, 253, 255);
             }
+            else if(hitInfo.transform.tag == "DragBar")
+            {
+                focusedObject = hitInfo.collider.gameObject;
+                
+            }
+            else if(hitInfo.transform.tag == "Contents")
+            {
+                Debug.Log("contents button hit");
+                focusedObject.GetComponent<Image>().color = new Color32(4, 143, 253, 255);
+                focusedObject = hitInfo.collider.gameObject;
+            }
             else
             {
                 focusedObject.GetComponent<Image>().color = new Color32(255, 255, 255, 255);
@@ -87,6 +127,7 @@ public class CanvasGaze : MonoBehaviour
                 //this.gameObject.transform.Find("Next Page").GetComponent<Image>().color = new Color32(255, 255, 255, 255);
                 //focusedObject.GetComponent<Image>().color = new Color32(255, 255, 255, 255);
             }
+            
             if(focusedObject != oldFocusedObject)
             {
                 recognizer.CancelGestures();
@@ -112,6 +153,32 @@ public class CanvasGaze : MonoBehaviour
             focusedObject = null;
             
         }
+    }
+    public void addGestures(string[] titles)
+    {
+        Debug.Log("add gestures started");
+        Debug.Log(titles);
+        recognizer.CancelGestures();
+        recognizer.Tapped += (args) =>
+        {
+            Debug.Log("tapped");
+            if (focusedObject != null)
+            {
+                Debug.Log(focusedObject);
+                for (int x = 0; x < titles.Length; x++)
+                {
+                    if (focusedObject == this.gameObject.transform.Find("InfoDoc(Clone)").transform.Find(titles[x]).gameObject)
+                    {
+                        Debug.Log("table of contents page " + x + "called");
+                        Debug.Log(this.gameObject.transform.Find("InfoDoc(Clone)").transform.Find(titles[x]).gameObject.name);
+                        string title = this.gameObject.transform.Find("InfoDoc(Clone)").transform.Find(titles[x]).gameObject.name;
+                        this.gameObject.transform.Find("InfoDoc(Clone)").SendMessage("OnChangeContent", title, SendMessageOptions.DontRequireReceiver);
+                        //this.gameObject.transform.Find("InfoDoc(Clone)").transform.Find(titles[x]).gameObject.SendMessage("OnChangePage", SendMessageOptions.DontRequireReceiver);
+                    }
+                }
+             }
+        };
+        recognizer.StartCapturingGestures();
     }
     
 }
