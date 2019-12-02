@@ -25,7 +25,7 @@ public class SpeechManager : MonoBehaviour
         keywords.Add("Next Page", () =>
         {
             //var focusedObject = LocationManager.Instance.FocusedObject;
-            Debug.Log("Next page Called");
+            Debug.Log("Next page Called by voice");
             //if(focusedObject != null)
             //{
             this.gameObject.transform.Find("InfoDoc(Clone)").SendMessage("OnNextPage", SendMessageOptions.DontRequireReceiver);
@@ -55,7 +55,8 @@ public class SpeechManager : MonoBehaviour
         //});
         keywords.Add("Close Document", () =>
         {
-            GameObject[] gameObjects = GameObject.FindGameObjectsWithTag("interactible");
+            Debug.Log("close document");
+            GameObject[] gameObjects = GameObject.FindGameObjectsWithTag("Canvas");
 
             for (var i = 0; i < gameObjects.Length; i++)
             {

@@ -17,7 +17,7 @@ public class CanvasGaze : MonoBehaviour
             if (focusedObject != null)
             {
                 if (focusedObject == this.gameObject.transform.Find("InfoDoc(Clone)").transform.Find("Next Page").gameObject) {
-                    Debug.Log("accessed");
+                    Debug.Log("next page called by gesture");
                     this.gameObject.transform.Find("InfoDoc(Clone)").SendMessage("OnNextPage", SendMessageOptions.DontRequireReceiver);
                 }
                 else if(focusedObject == this.gameObject.transform.Find("InfoDoc(Clone)").transform.Find("Previous").gameObject)
@@ -25,6 +25,17 @@ public class CanvasGaze : MonoBehaviour
                     Debug.Log("previous page");
                     this.gameObject.transform.Find("InfoDoc(Clone)").SendMessage("OnPreviousPage", SendMessageOptions.DontRequireReceiver);
                 }
+                else if(focusedObject == this.gameObject.transform.Find("InfoDoc(Clone)").transform.Find("Close").gameObject)
+                {
+                    Debug.Log("close document");
+                    GameObject[] gameObjects = GameObject.FindGameObjectsWithTag("Canvas");
+
+                    for (var i = 0; i < gameObjects.Length; i++)
+                    {
+                        Destroy(gameObjects[i]);
+                    }
+                }
+               
                 
             }
             else
@@ -55,7 +66,6 @@ public class CanvasGaze : MonoBehaviour
             if (hitInfo.transform.tag == "Next Page")
             {
                 focusedObject = hitInfo.collider.gameObject;
-                Debug.Log(focusedObject);
                 focusedObject.GetComponent<Image>().color = new Color32(4, 143, 253, 255);
                 
             }
@@ -65,8 +75,14 @@ public class CanvasGaze : MonoBehaviour
                 focusedObject = hitInfo.collider.gameObject;
                 focusedObject.GetComponent<Image>().color = new Color32(4, 143, 253, 255);
             }
+            else if(hitInfo.transform.tag == "Close")
+            {
+                focusedObject = hitInfo.collider.gameObject;
+                focusedObject.GetComponent<Image>().color = new Color32(4, 143, 253, 255);
+            }
             else
             {
+                focusedObject.GetComponent<Image>().color = new Color32(255, 255, 255, 255);
                 focusedObject = null;
                 //this.gameObject.transform.Find("Next Page").GetComponent<Image>().color = new Color32(255, 255, 255, 255);
                 //focusedObject.GetComponent<Image>().color = new Color32(255, 255, 255, 255);
@@ -97,4 +113,5 @@ public class CanvasGaze : MonoBehaviour
             
         }
     }
+    
 }

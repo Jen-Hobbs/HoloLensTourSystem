@@ -188,9 +188,9 @@ public class HttpHandler : MonoBehaviour
     public void ShowSlide(int slideNumber)
     {
         Debug.Log("currentSlide:" + currentSlide);
-        Debug.Log("slideNumber:" + slideNumber);
-        Debug.Log("testing" + slideList[slideNumber].text);
-        Debug.Log("text box available" + textInfo.text);
+        //Debug.Log("slideNumber:" + slideNumber);
+        //Debug.Log("testing" + slideList[slideNumber].text);
+        //Debug.Log("text box available" + textInfo.text);
         textInfo.text = slideList[slideNumber].text;
         title.text = slideList[slideNumber].title;
 
@@ -202,6 +202,7 @@ public class HttpHandler : MonoBehaviour
 
     void OnNextPage()
     {
+        Debug.Log("next page called");
         //Debug.Log("the number of slides are" + numberOfSlides);
         //Debug.Log("you are currently on slide " + currentSlide);
         //check if its the last page. If it is, go back to first page
@@ -221,7 +222,7 @@ public class HttpHandler : MonoBehaviour
     void OnPreviousPage()
     {
         //check if its the first page. If it is, do nothing.
-        if (currentSlide == numberOfSlides - 1)
+        if (currentSlide == 0)
         {
             Debug.Log("no pages available");
         }

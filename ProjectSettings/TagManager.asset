@@ -8,6 +8,7 @@ TagManager:
   - Next Page
   - Previous Page
   - Canvas
+  - Close
   layers:
   - Default
   - TransparentFX
