@@ -153,8 +153,8 @@ public class QRCodeScanner : MonoBehaviour, IMixedRealityInputHandler
         info.transform.parent = GameObject.Find("GameManager").transform;
         info.GetComponent<HttpHandler>().postReq("name", "Hololens");
     
-        RaycastHit hit;
-        if (!Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, 10f)) photoCaptureObject.TakePhotoAsync(OnCapturedPhotoToMemory);
+        //RaycastHit hit;
+        //if (!Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, 10f)) photoCaptureObject.TakePhotoAsync(OnCapturedPhotoToMemory);
     }
 
 

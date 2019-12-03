@@ -16,7 +16,7 @@ public class HttpHandler : MonoBehaviour
     public GameObject docImage;
     public TextMeshProUGUI textInfo;
     public TextMeshProUGUI title;
-
+    public GameObject tableContent;
     //variables to save data from request 
     public AudioClip audioClip;
     public Texture texture;
@@ -107,6 +107,10 @@ public class HttpHandler : MonoBehaviour
                     }
 
                     i++;
+                    if(numberOfSlides > 0)
+                    {
+                        ShowContents();
+                    }
                 }
                 Debug.Log("count" + slideList.Count);
                 numberOfSlides = slideList.Count;
