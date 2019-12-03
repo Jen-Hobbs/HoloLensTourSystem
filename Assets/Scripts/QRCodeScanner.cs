@@ -102,7 +102,7 @@ public class QRCodeScanner : MonoBehaviour, IMixedRealityInputHandler
         Debug.Log("Run canvas to create document");
         GameObject[] gameObjects = GameObject.FindGameObjectsWithTag("Canvas");
         GameObject obj = GameObject.Find("GameManager");
-        //obj.GetComponent<SpeechManager>().deleteSpeech();
+        obj.GetComponent<SpeechManager>().restartSpeech();
         obj.GetComponent<CanvasGaze>().restartGestures();
         
         

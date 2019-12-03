@@ -212,6 +212,22 @@ public class HttpHandler : MonoBehaviour
         Debug.Log("show contents");
         Debug.Log(numberOfSlides);
         string[] titles = new string[numberOfSlides];
+        int y = 1;
+        for (int x = 0; x < numberOfSlides; x++)
+        {
+            int counter = 2;
+            while(y < numberOfSlides)
+            { 
+                if(slideList[x].title == slideList[y].title)
+                {
+                    slideList[y].title += " Part " + counter;
+                    counter++;
+                    Debug.Log(slideList[x].title);
+                }
+                y++;
+            }
+            y++;
+        }
            for(int x = 0; x < numberOfSlides; x++)
            {
                 GameObject button = Instantiate(tableContent, new Vector3(buttonX, buttonStartY - (x * buttonYScale), 0), Quaternion.identity) as GameObject;
@@ -245,11 +261,15 @@ public class HttpHandler : MonoBehaviour
         //check if its the last page. If it is, go back to first page
         if(currentSlide == numberOfSlides-1)
         {
+            GameObject obj = this.gameObject.transform.Find("Previous").gameObject;
+            obj.SetActive(false);
             currentSlide = 0;
             ShowSlide(currentSlide);
             Debug.Log("Start from the begining");
         } else
         {
+            GameObject obj = this.gameObject.transform.Find("Previous").gameObject;
+            obj.SetActive(true);
             currentSlide += 1;
             ShowSlide(currentSlide);
             Debug.Log("next page started");
@@ -262,10 +282,16 @@ public class HttpHandler : MonoBehaviour
         if (currentSlide == 0)
         {
             Debug.Log("no pages available");
+           
         }
         else
         {
             currentSlide -= 1;
+            if(currentSlide == 0)
+            {
+                GameObject obj = this.gameObject.transform.Find("Previous").gameObject;
+                obj.SetActive(false);
+            }
             ShowSlide(currentSlide);
             Debug.Log("previous page loading");
         }
