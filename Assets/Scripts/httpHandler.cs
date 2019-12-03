@@ -190,7 +190,52 @@ public class HttpHandler : MonoBehaviour
         Sprite sprite = Sprite.Create(tex, new Rect(0.0f, 0.0f, tex.width, tex.height), new Vector2(0.5f, 0.5f), 100.0f);
         docImage.GetComponent<Image>().sprite = sprite;
     }
+    void ShowContents()
+    {
+        Debug.Log("show contents");
+        Debug.Log(numberOfSlides);
+        string[] titles = new string[numberOfSlides];
+        int y = 1;
+        for (int x = 0; x < numberOfSlides; x++)
+        {
+            int counter = 2;
+            while (y < numberOfSlides)
+            {
+                if (slideList[x].title == slideList[y].title)
+                {
+                    slideList[y].title += " Part " + counter;
+                    counter++;
+                    Debug.Log(slideList[x].title);
+                }
+                y++;
+            }
+            y++;
+        }
+        for (int x = 0; x < numberOfSlides; x++)
+        {
+            GameObject button = Instantiate(tableContent, new Vector3(buttonX, buttonStartY - (x * buttonYScale), 0), Quaternion.identity) as GameObject;
+            button.name = slideList[x].title;
+            Vector3 scale = button.transform.localScale;
+            Vector3 pos = button.transform.position;
+            button.transform.SetParent(docImage.transform.parent);
+            button.transform.localScale = scale;
+            button.transform.localPosition = new Vector3(buttonX, buttonStartY - (x * buttonYScale), 0);
+            titles[x] = slideList[x].title;
+            if (slideList[x].title.Length > 15)
+            {
+                string text = slideList[x].title.Substring(0, 15) + "...";
+                button.GetComponentInChildren<TextMeshProUGUI>().text = text;
+            }
+            else
+            {
+                button.GetComponentInChildren<TextMeshProUGUI>().text = slideList[x].title;
+            }
+        }
 
+        this.gameObject.GetComponentInParent<CanvasGaze>().addGestures(titles);
+        this.gameObject.GetComponentInParent<SpeechManager>().addSpeech(titles);
+
+    }
     void OnNextPage()
     {
         //check if its the last page. If it is, go back to first page
