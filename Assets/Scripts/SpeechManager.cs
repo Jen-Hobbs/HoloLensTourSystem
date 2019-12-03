@@ -8,6 +8,7 @@ public class SpeechManager : MonoBehaviour
 {
     private delegate void MyDelegate(int x);
     private static KeywordRecognizer keywordRecognizer = null;
+
     private static Dictionary<string, System.Action> keywords = null;
     private static string[] currentWords = null;
     
@@ -28,10 +29,12 @@ public class SpeechManager : MonoBehaviour
     {
         
     }
+
     /// <summary>
     /// invokes keywords (used from https://docs.microsoft.com/en-us/windows/mixed-reality/holograms-101)
     /// </summary>
     /// <param name="args"></param>
+
     private static void KeywordRecognizer_OnPhraseRecognized(PhraseRecognizedEventArgs args)
     {
         System.Action keywordAction;
@@ -41,6 +44,7 @@ public class SpeechManager : MonoBehaviour
         }
     }
     //dont forget to delete words when done with canvas
+
     /// <summary>
     /// Yet to be implemented but should create words based of the title of each page to go through pages
     /// </summary>
@@ -164,11 +168,15 @@ public class SpeechManager : MonoBehaviour
         }
 
         // Tell the KeywordRecognizer about our keywords.
+
+
+
         keywordRecognizer = new KeywordRecognizer(keywords.Keys.ToArray());
 
         // Register a callback for the KeywordRecognizer and start recognizing!
         keywordRecognizer.OnPhraseRecognized += KeywordRecognizer_OnPhraseRecognized;
         keywordRecognizer.Start();
+
 
     }
 }

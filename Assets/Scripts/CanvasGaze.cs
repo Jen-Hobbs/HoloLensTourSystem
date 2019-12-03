@@ -163,6 +163,7 @@ public class CanvasGaze : MonoBehaviour
             }
             else
             {
+                Debug.Log(this.gameObject.transform.Find("Main"));
                 this.gameObject.transform.Find("Main").SendMessage("runCanvas", SendMessageOptions.DontRequireReceiver);
             }
         };
