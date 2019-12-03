@@ -95,14 +95,28 @@ public class QRCodeScanner : MonoBehaviour, IMixedRealityInputHandler
             }
             else
             {
-                //qrAvailable = true;
-                instruction.text = "Scan success";
+                Debug.Log("Run canvas to create document");
+                GameObject[] gameObjects = GameObject.FindGameObjectsWithTag("Canvas");
+                GameObject obj = GameObject.Find("GameManager");
+                obj.GetComponent<SpeechManager>().restartSpeech();
+                obj.GetComponent<CanvasGaze>().restartGestures();
+
+
+
+                for (var i = 0; i < gameObjects.Length; i++)
+                {
+                    Destroy(gameObjects[i]);
+                }
+                //GameObject info = Instantiate(infoDoc, new Vector3(0, 0, 2), Quaternion.identity) as GameObject;
+                //info.transform.parent = GameObject.Find("GameManager").transform;
+                //info.GetComponent<HttpHandler>().postReq("name", "Hololens");
                 GameObject info = Instantiate(infoDoc, Camera.main.transform.position + Camera.main.transform.forward * 1.66f, Quaternion.identity) as GameObject;
-                info.transform.LookAt(Camera.main.transform);
+                info.transform.LookAt(Camera.main.transform, Vector3.up);
                 info.transform.LookAt(2 * info.transform.position - Camera.main.transform.position);
                 info.transform.position = new Vector3(info.transform.position.x - 0.5f, info.transform.position.y - 0.2f, info.transform.position.z);
+                info.transform.parent = GameObject.Find("GameManager").transform;
                 info.GetComponent<HttpHandler>().postReq("name", resultStr);
-                /* succeeded to decode QR code */
+
             }
             StartCoroutine(WaitAndPrint(4.4f, "Tap to scan QR code", instruction));
         }
@@ -137,24 +151,10 @@ public class QRCodeScanner : MonoBehaviour, IMixedRealityInputHandler
     }
     public void runCanvas()
     {
-        Debug.Log("Run canvas to create document");
-        GameObject[] gameObjects = GameObject.FindGameObjectsWithTag("Canvas");
-        GameObject obj = GameObject.Find("GameManager");
-        obj.GetComponent<SpeechManager>().restartSpeech();
-        obj.GetComponent<CanvasGaze>().restartGestures();
         
-        
-
-        for (var i = 0; i < gameObjects.Length; i++)
-        {
-            Destroy(gameObjects[i]);
-        }
-        GameObject info = Instantiate(infoDoc, new Vector3(0, 0, 2), Quaternion.identity) as GameObject;
-        info.transform.parent = GameObject.Find("GameManager").transform;
-        info.GetComponent<HttpHandler>().postReq("name", "Hololens");
-    
-        //RaycastHit hit;
-        //if (!Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, 10f)) photoCaptureObject.TakePhotoAsync(OnCapturedPhotoToMemory);
+        RaycastHit hit;
+        if (!Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, 10f)) 
+            photoCaptureObject.TakePhotoAsync(OnCapturedPhotoToMemory);
     }
 
 

@@ -230,13 +230,21 @@ public class HttpHandler : MonoBehaviour
         }
         for (int x = 0; x < numberOfSlides; x++)
         {
-            GameObject button = Instantiate(tableContent, new Vector3(buttonX, buttonStartY - (x * buttonYScale), 0), Quaternion.identity) as GameObject;
+            
+            GameObject button = Instantiate(tableContent, new Vector3(buttonX, buttonStartY - (x * buttonYScale), 0), gameObject.transform.rotation) as GameObject;
+
             button.name = slideList[x].title;
             Vector3 scale = button.transform.localScale;
             Vector3 pos = button.transform.position;
             button.transform.SetParent(docImage.transform.parent);
             button.transform.localScale = scale;
             button.transform.localPosition = new Vector3(buttonX, buttonStartY - (x * buttonYScale), 0);
+            //button.transform.LookAt(Camera.main.transform, Vector3.up);
+            //button.transform.LookAt(2 * button.transform.position - Camera.main.transform.position);
+
+            button.transform.LookAt(docImage.transform.parent.transform.forward, Vector3.up);
+            button.transform.LookAt(2 * button.transform.position - docImage.transform.parent.transform.forward);
+
             titles[x] = slideList[x].title;
             if (slideList[x].title.Length > 15)
             {
