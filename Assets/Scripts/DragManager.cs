@@ -19,7 +19,7 @@ public class DragManager : MonoBehaviour
         if (holding)
         {
             canvasPosition = Camera.main.transform.position + Camera.main.transform.forward * 2.0f;
-            transform.parent.position = canvasPosition;
+            transform.position = canvasPosition;
 
         }
         

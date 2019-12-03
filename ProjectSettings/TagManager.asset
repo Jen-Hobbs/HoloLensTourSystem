@@ -10,7 +10,7 @@ TagManager:
   - Canvas
   - Close
   - DragBar
-  - Conents
+  - Contents
   layers:
   - Default
   - TransparentFX

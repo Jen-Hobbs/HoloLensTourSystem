@@ -271,6 +271,15 @@ public class HttpHandler : MonoBehaviour
     }
     void OnChangeContent(string title)
     {
+        for(int x = 0; x < numberOfSlides; x++)
+        {
+            if(title == slideList[x].title)
+            {
+                currentSlide = x;
+                ShowSlide(x);
+               
+            }
+        }
         Debug.Log("title of contents in http handler" + title);
     }
 }

@@ -16,7 +16,7 @@ public class SpeechManager : MonoBehaviour
     /// </summary>
     void Start()
     {
-        
+        Debug.Log("keyword recognizer started");
         keywords.Add("Help", () =>
         {
             Debug.Log("help called");
@@ -63,6 +63,12 @@ public class SpeechManager : MonoBehaviour
                 Destroy(gameObjects[i]);
             }
         });
+        string[] keys = keywords.Keys.ToArray();
+        for (int x = 0; x < keys.Length; x++)
+        {
+            Debug.Log(keys[x]);
+        }
+        
         // Tell the KeywordRecognizer about our keywords.
         keywordRecognizer = new KeywordRecognizer(keywords.Keys.ToArray());
 
@@ -95,34 +101,34 @@ public class SpeechManager : MonoBehaviour
     /// <summary>
     /// Yet to be implemented but should create words based of the title of each page to go through pages
     /// </summary>
-    public static void ContentCanvas()
-    {
+    //public static void ContentCanvas()
+    //{
 
-        Debug.Log("contentcanvas initialized");
-        for (int x = 0; x < CanvasContent.titles.Length; x++)
-        {
-            keywords.Add("view " + CanvasContent.titles[x], () =>
-            {
-                GameObject focusedObject = LocationManager.Instance.FocusedObject;
-                if (focusedObject != null)
-                {
-                    focusedObject.SendMessage("OnContent", "Working progress" , SendMessageOptions.DontRequireReceiver);
-                    //Debug.Log(CanvasContent.titles[x]);
-                }
-            });
-        }
-        
-        foreach (string key in keywords.Keys)
-        {
-            Debug.Log(key);
-        }
-        keywordRecognizer.Dispose();
-        keywordRecognizer = new KeywordRecognizer(keywords.Keys.ToArray());
+    //    Debug.Log("contentcanvas initialized");
+    //    for (int x = 0; x < CanvasContent.titles.Length; x++)
+    //    {
+    //        keywords.Add("view " + CanvasContent.titles[x], () =>
+    //        {
+    //            GameObject focusedObject = LocationManager.Instance.FocusedObject;
+    //            if (focusedObject != null)
+    //            {
+    //                focusedObject.SendMessage("OnContent", "Working progress", SendMessageOptions.DontRequireReceiver);
+    //                //Debug.Log(CanvasContent.titles[x]);
+    //            }
+    //        });
+    //    }
 
-        // Register a callback for the KeywordRecognizer and start recognizing!
-        keywordRecognizer.OnPhraseRecognized += KeywordRecognizer_OnPhraseRecognized;
-        keywordRecognizer.Start();
-        //Debug.Log(CanvasContent.titles.Length);
+    //    foreach (string key in keywords.Keys)
+    //    {
+    //        Debug.Log(key);
+    //    }
+    //    keywordRecognizer.Dispose();
+    //    keywordRecognizer = new KeywordRecognizer(keywords.Keys.ToArray());
 
-    }
+    //    // Register a callback for the KeywordRecognizer and start recognizing!
+    //    keywordRecognizer.OnPhraseRecognized += KeywordRecognizer_OnPhraseRecognized;
+    //    keywordRecognizer.Start();
+    //    //Debug.Log(CanvasContent.titles.Length);
+
+    //}
 }

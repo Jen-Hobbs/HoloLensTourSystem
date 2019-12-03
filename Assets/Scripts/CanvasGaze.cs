@@ -92,6 +92,7 @@ public class CanvasGaze : MonoBehaviour
 
         if (Physics.Raycast(headPosition, gazeDirection, out hitInfo))
         {
+           
             if (hitInfo.transform.tag == "Next Page")
             {
                 focusedObject = hitInfo.collider.gameObject;
@@ -114,14 +115,17 @@ public class CanvasGaze : MonoBehaviour
                 focusedObject = hitInfo.collider.gameObject;
                 
             }
-            else if(hitInfo.transform.tag == "Contents")
+            else if(hitInfo.transform.gameObject.tag == "Contents")
             {
                 Debug.Log("contents button hit");
-                focusedObject.GetComponent<Image>().color = new Color32(4, 143, 253, 255);
                 focusedObject = hitInfo.collider.gameObject;
+                focusedObject.GetComponent<Image>().color = new Color32(4, 143, 253, 255);
+                
             }
             else
             {
+                Debug.Log("nothing selected something hit");
+                Debug.Log(hitInfo.collider.gameObject.tag);
                 focusedObject.GetComponent<Image>().color = new Color32(255, 255, 255, 255);
                 focusedObject = null;
                 //this.gameObject.transform.Find("Next Page").GetComponent<Image>().color = new Color32(255, 255, 255, 255);
@@ -147,11 +151,12 @@ public class CanvasGaze : MonoBehaviour
         {
             if (focusedObject != null)
             {
+                
                 // If the raycast did not hit a hologram, ensure previous focused object is not selected
                 focusedObject.GetComponent<Image>().color = new Color32(255, 255, 255, 255);
             }
             focusedObject = null;
-            
+            Debug.Log("focused object is null");
         }
     }
     public void addGestures(string[] titles)

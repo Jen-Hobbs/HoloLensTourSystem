@@ -11,7 +11,6 @@ public class CanvasContent : MonoBehaviour
     public Sprite NextSprite; //test content
     public Sprite PreviousSprite; //test content
     public TextMeshProUGUI title;
-    public static string[] titles; //test content
     public GameObject content;
     private const int buttonX = 30;
     private const int buttonStartY = -10;
@@ -24,12 +23,7 @@ public class CanvasContent : MonoBehaviour
     void Start()
     {
         //test content added from db
-        titles = new string[5];
-        titles[0] = "information";
-        titles[1] = "basic";
-        titles[2] = "instructions";
-        titles[3] = "contact information";
-        titles[4] = "something else";
+
 
 
      //   for(int x = 0; x < titles.Length; x++)
