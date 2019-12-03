@@ -8,7 +8,8 @@ public class SpeechManager : MonoBehaviour
 {
     private delegate void MyDelegate(int x);
     private static KeywordRecognizer keywordRecognizer = null;
-    private static Dictionary<string, System.Action> keywords = new Dictionary<string, System.Action>();
+    private static Dictionary<string, System.Action> keywords = null;
+    private static string[] currentWords = null;
     
     // Start is called before the first frame update
     /// <summary>
@@ -16,65 +17,7 @@ public class SpeechManager : MonoBehaviour
     /// </summary>
     void Start()
     {
-        Debug.Log("keyword recognizer started");
-        keywords.Add("Help", () =>
-        {
-            Debug.Log("help called");
-            this.BroadcastMessage("OnHelp");
-        });
-        keywords.Add("Next Page", () =>
-        {
-            //var focusedObject = LocationManager.Instance.FocusedObject;
-            Debug.Log("Next page Called by voice");
-            //if(focusedObject != null)
-            //{
-            this.gameObject.transform.Find("InfoDoc(Clone)").SendMessage("OnNextPage", SendMessageOptions.DontRequireReceiver);
-            //focusedObject.SendMessage("OnNextPage", SendMessageOptions.DontRequireReceiver);
-                //Debug.Log(focusedObject);
-            //}
-        });
-        keywords.Add("Previous Page", () =>
-        {
-            //var focusedObject = LocationManager.Instance.FocusedObject;
-            Debug.Log("Previous page Called");
-            this.gameObject.transform.Find("InfoDoc(Clone)").SendMessage("OnPreviousPage", SendMessageOptions.DontRequireReceiver);
-            //if (focusedObject != null)
-            //{
-            //focusedObject.SendMessage("OnPreviousPage", SendMessageOptions.DontRequireReceiver);
-            //Debug.Log(focusedObject);
-            //}
-        });
-        //keywords.Add("Open Document", () =>
-        //{
-        //    var focusedObject = LocationManager.Instance.FocusedObject;
-        //    if (focusedObject != null)
-        //    {
-        //        Debug.Log("open document said");
-        //        focusedObject.SendMessage("OnOpenDocument", SendMessageOptions.DontRequireReceiver);
-        //    }
-        //});
-        keywords.Add("Close Document", () =>
-        {
-            Debug.Log("close document");
-            GameObject[] gameObjects = GameObject.FindGameObjectsWithTag("Canvas");
-
-            for (var i = 0; i < gameObjects.Length; i++)
-            {
-                Destroy(gameObjects[i]);
-            }
-        });
-        string[] keys = keywords.Keys.ToArray();
-        for (int x = 0; x < keys.Length; x++)
-        {
-            Debug.Log(keys[x]);
-        }
-        
-        // Tell the KeywordRecognizer about our keywords.
-        keywordRecognizer = new KeywordRecognizer(keywords.Keys.ToArray());
-
-        // Register a callback for the KeywordRecognizer and start recognizing!
-        keywordRecognizer.OnPhraseRecognized += KeywordRecognizer_OnPhraseRecognized;
-        keywordRecognizer.Start();
+        restartSpeech();
     }
     void test(int x)
     {
@@ -131,4 +74,101 @@ public class SpeechManager : MonoBehaviour
     //    //Debug.Log(CanvasContent.titles.Length);
 
     //}
+    public void addSpeech(string[] titles)
+    {
+        keywordRecognizer.Stop();
+        for (int x = 0; x < titles.Length; x++)
+        {
+            keywords.Add(titles[x], () =>
+            {
+                Debug.Log(titles[x] + "Called by voice");
+                //unable to test at this time bad voice recognizer
+                this.gameObject.transform.Find("InfoDoc(Clone)").SendMessage("OnChangeContent", titles[x], SendMessageOptions.DontRequireReceiver);
+                
+            });
+        }
+        currentWords = keywords.Keys.ToArray();
+        for (int x = 0; x < currentWords.Length; x++)
+        {
+            Debug.Log(currentWords[x]);
+        }
+        // Tell the KeywordRecognizer about our keywords.
+        keywordRecognizer = new KeywordRecognizer(keywords.Keys.ToArray());
+
+        // Register a callback for the KeywordRecognizer and start recognizing!
+        keywordRecognizer.OnPhraseRecognized += KeywordRecognizer_OnPhraseRecognized;
+        keywordRecognizer.Start();
+
+    }
+    public void restartSpeech()
+    {
+        if(keywordRecognizer != null)
+        {
+            keywordRecognizer.Stop();
+            keywords = null;
+            keywordRecognizer.Dispose();
+        }
+        keywords = new Dictionary<string, System.Action>();
+        Debug.Log("keyword recognizer started");
+        keywords.Add("Help", () =>
+        {
+            Debug.Log("help called");
+            this.BroadcastMessage("OnHelp");
+        });
+        keywords.Add("Next Page", () =>
+        {
+            //var focusedObject = LocationManager.Instance.FocusedObject;
+            Debug.Log("Next page Called by voice");
+            //if(focusedObject != null)
+            //{
+            this.gameObject.transform.Find("InfoDoc(Clone)").SendMessage("OnNextPage", SendMessageOptions.DontRequireReceiver);
+            //focusedObject.SendMessage("OnNextPage", SendMessageOptions.DontRequireReceiver);
+            //Debug.Log(focusedObject);
+            //}
+        });
+        keywords.Add("Previous Page", () =>
+        {
+            //var focusedObject = LocationManager.Instance.FocusedObject;
+            Debug.Log("Previous page Called");
+            this.gameObject.transform.Find("InfoDoc(Clone)").SendMessage("OnPreviousPage", SendMessageOptions.DontRequireReceiver);
+            //if (focusedObject != null)
+            //{
+            //focusedObject.SendMessage("OnPreviousPage", SendMessageOptions.DontRequireReceiver);
+            //Debug.Log(focusedObject);
+            //}
+        });
+        //keywords.Add("Open Document", () =>
+        //{
+        //    var focusedObject = LocationManager.Instance.FocusedObject;
+        //    if (focusedObject != null)
+        //    {
+        //        Debug.Log("open document said");
+        //        focusedObject.SendMessage("OnOpenDocument", SendMessageOptions.DontRequireReceiver);
+        //    }
+        //});
+        keywords.Add("Close Document", () =>
+        {
+            Debug.Log("close document");
+            GameObject[] gameObjects = GameObject.FindGameObjectsWithTag("Canvas");
+            restartSpeech();
+            this.gameObject.GetComponent<CanvasGaze>().restartGestures();
+            for (var i = 0; i < gameObjects.Length; i++)
+            {
+                Destroy(gameObjects[i]);
+            }
+        });
+        string[] keys = keywords.Keys.ToArray();
+        for (int x = 0; x < keys.Length; x++)
+        {
+            Debug.Log(keys[x]);
+        }
+
+        // Tell the KeywordRecognizer about our keywords.
+        keywordRecognizer = new KeywordRecognizer(keywords.Keys.ToArray());
+
+        // Register a callback for the KeywordRecognizer and start recognizing!
+        keywordRecognizer.OnPhraseRecognized += KeywordRecognizer_OnPhraseRecognized;
+        keywordRecognizer.Start();
+
+    }
 }

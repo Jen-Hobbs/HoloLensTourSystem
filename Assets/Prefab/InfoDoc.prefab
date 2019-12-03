@@ -973,8 +973,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 30, y: -10}
-  m_SizeDelta: {x: 140, y: 20}
+  m_AnchoredPosition: {x: 20, y: -10}
+  m_SizeDelta: {x: 120, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!65 &511518006517029862
 BoxCollider:
@@ -987,7 +987,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 140, y: 20, z: 4}
+  m_Size: {x: 120, y: 20, z: 4}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &5288670798905858397
 GameObject:

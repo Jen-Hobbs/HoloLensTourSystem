@@ -4,76 +4,13 @@ using UnityEngine.XR.WSA.Input;
 
 public class CanvasGaze : MonoBehaviour
 {
-    private MeshRenderer meshRenderer;
+
     private GameObject focusedObject;
     private GestureRecognizer recognizer;
+
     void Start()
     {
-        recognizer = new GestureRecognizer();
-        recognizer.Tapped += (args) =>
-        {
-            
-            ///change to be based on object
-            if (focusedObject != null)
-            {
-                if (focusedObject == this.gameObject.transform.Find("InfoDoc(Clone)").transform.Find("Next Page").gameObject) {
-                    Debug.Log("next page called by gesture");
-                    this.gameObject.transform.Find("InfoDoc(Clone)").SendMessage("OnNextPage", SendMessageOptions.DontRequireReceiver);
-                }
-                else if(focusedObject == this.gameObject.transform.Find("InfoDoc(Clone)").transform.Find("Previous").gameObject)
-                {
-                    Debug.Log("previous page");
-                    this.gameObject.transform.Find("InfoDoc(Clone)").SendMessage("OnPreviousPage", SendMessageOptions.DontRequireReceiver);
-                }
-                else if(focusedObject == this.gameObject.transform.Find("InfoDoc(Clone)").transform.Find("Close").gameObject)
-                {
-                    Debug.Log("close document");
-                    GameObject[] gameObjects = GameObject.FindGameObjectsWithTag("Canvas");
-
-                    for (var i = 0; i < gameObjects.Length; i++)
-                    {
-                        Destroy(gameObjects[i]);
-                    }
-                }
-                
-               
-                
-            }
-            else
-            {
-                this.gameObject.transform.Find("Main").SendMessage("runCanvas", SendMessageOptions.DontRequireReceiver);
-            }
-        };
-        recognizer.HoldStartedEvent += (source, ray) =>
-        {
-            Debug.Log("hold started");
-            if (focusedObject == this.gameObject.transform.Find("InfoDoc(Clone)").transform.Find("DragBar").gameObject)
-            {
-                Debug.Log("correct thing selected and holding");
-                focusedObject.transform.parent.GetComponent<DragManager>().Move();
-            }
-            else
-            {
-                focusedObject.transform.parent.GetComponent<DragManager>().PlaceCanvas();
-            }
-            
-        };
-        recognizer.HoldCompletedEvent += (source, ray) =>
-        {
-            Debug.Log("hold completed");
-            
-            //if (focusedObject == this.gameObject.transform.Find("InfoDoc(Clone)").transform.Find("DragBar").gameObject)
-            //{
-                focusedObject.transform.parent.GetComponent<DragManager>().PlaceCanvas();
-            //}
-        };
-        recognizer.HoldCanceledEvent += (source, ray) =>
-        {
-            Debug.Log("hold canceled");
-            focusedObject.transform.parent.GetComponent<DragManager>().PlaceCanvas();
-        };
-        recognizer.StartCapturingGestures();
-        // Grab the mesh renderer that's on the same object as this script.
+        restartGestures();
     }
     /// <summary>
     /// content made from https://docs.microsoft.com/en-us/windows/mixed-reality/holograms-101
@@ -92,35 +29,35 @@ public class CanvasGaze : MonoBehaviour
 
         if (Physics.Raycast(headPosition, gazeDirection, out hitInfo))
         {
-           
+
             if (hitInfo.transform.tag == "Next Page")
             {
                 focusedObject = hitInfo.collider.gameObject;
                 focusedObject.GetComponent<Image>().color = new Color32(4, 143, 253, 255);
-                
+
             }
-            
+
             else if (hitInfo.transform.tag == "Previous Page")
             {
                 focusedObject = hitInfo.collider.gameObject;
                 focusedObject.GetComponent<Image>().color = new Color32(4, 143, 253, 255);
             }
-            else if(hitInfo.transform.tag == "Close")
+            else if (hitInfo.transform.tag == "Close")
             {
                 focusedObject = hitInfo.collider.gameObject;
                 focusedObject.GetComponent<Image>().color = new Color32(4, 143, 253, 255);
             }
-            else if(hitInfo.transform.tag == "DragBar")
+            else if (hitInfo.transform.tag == "DragBar")
             {
                 focusedObject = hitInfo.collider.gameObject;
-                
+
             }
-            else if(hitInfo.transform.gameObject.tag == "Contents")
+            else if (hitInfo.transform.gameObject.tag == "Contents")
             {
                 Debug.Log("contents button hit");
                 focusedObject = hitInfo.collider.gameObject;
                 focusedObject.GetComponent<Image>().color = new Color32(4, 143, 253, 255);
-                
+
             }
             else
             {
@@ -131,8 +68,8 @@ public class CanvasGaze : MonoBehaviour
                 //this.gameObject.transform.Find("Next Page").GetComponent<Image>().color = new Color32(255, 255, 255, 255);
                 //focusedObject.GetComponent<Image>().color = new Color32(255, 255, 255, 255);
             }
-            
-            if(focusedObject != oldFocusedObject)
+
+            if (focusedObject != oldFocusedObject)
             {
                 recognizer.CancelGestures();
                 recognizer.StartCapturingGestures();
@@ -151,7 +88,7 @@ public class CanvasGaze : MonoBehaviour
         {
             if (focusedObject != null)
             {
-                
+
                 // If the raycast did not hit a hologram, ensure previous focused object is not selected
                 focusedObject.GetComponent<Image>().color = new Color32(255, 255, 255, 255);
             }
@@ -181,9 +118,83 @@ public class CanvasGaze : MonoBehaviour
                         //this.gameObject.transform.Find("InfoDoc(Clone)").transform.Find(titles[x]).gameObject.SendMessage("OnChangePage", SendMessageOptions.DontRequireReceiver);
                     }
                 }
-             }
+            }
         };
         recognizer.StartCapturingGestures();
     }
-    
+    public void restartGestures()
+    {
+        if(recognizer != null)
+        {
+            recognizer.CancelGestures();
+        }
+        recognizer = new GestureRecognizer();
+        recognizer.Tapped += (args) =>
+        {
+
+            ///change to be based on object
+            if (focusedObject != null)
+            {
+                if (focusedObject == this.gameObject.transform.Find("InfoDoc(Clone)").transform.Find("Next Page").gameObject)
+                {
+                    Debug.Log("next page called by gesture");
+                    this.gameObject.transform.Find("InfoDoc(Clone)").SendMessage("OnNextPage", SendMessageOptions.DontRequireReceiver);
+                }
+                else if (focusedObject == this.gameObject.transform.Find("InfoDoc(Clone)").transform.Find("Previous").gameObject)
+                {
+                    Debug.Log("previous page");
+                    this.gameObject.transform.Find("InfoDoc(Clone)").SendMessage("OnPreviousPage", SendMessageOptions.DontRequireReceiver);
+                }
+                else if (focusedObject == this.gameObject.transform.Find("InfoDoc(Clone)").transform.Find("Close").gameObject)
+                {
+                    Debug.Log("close document");
+                    GameObject[] gameObjects = GameObject.FindGameObjectsWithTag("Canvas");
+                    recognizer.CancelGestures();
+                    restartGestures();
+                    this.gameObject.GetComponent<SpeechManager>().restartSpeech();
+                    for (var i = 0; i < gameObjects.Length; i++)
+                    {
+                        Destroy(gameObjects[i]);
+                    }
+                }
+
+
+
+            }
+            else
+            {
+                this.gameObject.transform.Find("Main").SendMessage("runCanvas", SendMessageOptions.DontRequireReceiver);
+            }
+        };
+        recognizer.HoldStartedEvent += (source, ray) =>
+        {
+            Debug.Log("hold started");
+            if (focusedObject == this.gameObject.transform.Find("InfoDoc(Clone)").transform.Find("DragBar").gameObject)
+            {
+                Debug.Log("correct thing selected and holding");
+                focusedObject.transform.parent.GetComponent<DragManager>().Move();
+            }
+            else
+            {
+                focusedObject.transform.parent.GetComponent<DragManager>().PlaceCanvas();
+            }
+
+        };
+        recognizer.HoldCompletedEvent += (source, ray) =>
+        {
+            Debug.Log("hold completed");
+
+            //if (focusedObject == this.gameObject.transform.Find("InfoDoc(Clone)").transform.Find("DragBar").gameObject)
+            //{
+            focusedObject.transform.parent.GetComponent<DragManager>().PlaceCanvas();
+            //}
+        };
+        recognizer.HoldCanceledEvent += (source, ray) =>
+        {
+            Debug.Log("hold canceled");
+            focusedObject.transform.parent.GetComponent<DragManager>().PlaceCanvas();
+        };
+        recognizer.StartCapturingGestures();
+
+    }
 }

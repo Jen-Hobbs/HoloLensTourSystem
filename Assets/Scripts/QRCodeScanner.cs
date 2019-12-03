@@ -101,6 +101,12 @@ public class QRCodeScanner : MonoBehaviour, IMixedRealityInputHandler
     {
         Debug.Log("Run canvas to create document");
         GameObject[] gameObjects = GameObject.FindGameObjectsWithTag("Canvas");
+        GameObject obj = GameObject.Find("GameManager");
+        //obj.GetComponent<SpeechManager>().deleteSpeech();
+        obj.GetComponent<CanvasGaze>().restartGestures();
+        
+        
+
         for (var i = 0; i < gameObjects.Length; i++)
         {
             Destroy(gameObjects[i]);
@@ -129,6 +135,7 @@ public class QRCodeScanner : MonoBehaviour, IMixedRealityInputHandler
             Debug.Log("qr code not available");
         }
     }
+    
 
     public void OnInputUp(InputEventData eventData)
     {

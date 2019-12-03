@@ -234,7 +234,8 @@ public class HttpHandler : MonoBehaviour
            }
 
         this.gameObject.GetComponentInParent<CanvasGaze>().addGestures(titles);
-           
+        this.gameObject.GetComponentInParent<SpeechManager>().addSpeech(titles);
+
     }
     void OnNextPage()
     {
