@@ -6,6 +6,15 @@ using SimpleJSON;
 using TMPro;
 using System.Collections.Generic;
 
+/*
+ * Author: Joanna
+ * Date: 11/17/2019
+ * 
+ * Description: This class handles http calls, parses JSON using the SimpleJSON plugin
+ * and fetches and saves the text, image and audio data into custom objects called RootObject.
+ */
+
+
 /* 
  * Note: the QR code will have to be the name attribute right now for it to work
  */
@@ -17,6 +26,7 @@ public class HttpHandler : MonoBehaviour
     public TextMeshProUGUI textInfo;
     public TextMeshProUGUI title;
     public GameObject tableContent;
+
     //variables to save data from request 
     public AudioClip audioClip;
     public Texture texture;
@@ -28,7 +38,7 @@ public class HttpHandler : MonoBehaviour
     private const int buttonYScale = 20;
 
     //list of all RootObjects for one pop up canvas
-    public List<RootObject> slideList =  new List<RootObject>();
+    public List<RootObject> slideList = new List<RootObject>();
 
 
 
@@ -37,7 +47,7 @@ public class HttpHandler : MonoBehaviour
         currentSlide = 0;
         Debug.Log("start starded");
         Debug.Log("textInfo" + textInfo.text);
-        
+
         //StartCoroutine(PostRequest("name", "Hololens"));
     }
 
@@ -51,7 +61,7 @@ public class HttpHandler : MonoBehaviour
      */
     public IEnumerator PostRequest(string fieldName1, string fieldValue1)
     {
-        
+
         WWWForm form = new WWWForm();
         form.AddField(fieldName1, fieldValue1);
 
@@ -76,7 +86,7 @@ public class HttpHandler : MonoBehaviour
                 int i = 0;
                 //don't know how to get the total list size so just check if the next entry is an empty string
                 //might wanna change json structure later
-                while(!(parsedJSON[i]["id"].Value.Equals("")))
+                while (!(parsedJSON[i]["id"].Value.Equals("")))
                 {
                     Debug.Log("parsed jason");
                     RootObject r = new RootObject();
@@ -100,26 +110,26 @@ public class HttpHandler : MonoBehaviour
                     slideList.Add(r);
                     Debug.Log("testing" + r.title);
                     //if the first item is done, we can show the view :) 
-                    if(i == 0)
+                    if (i == 0)
                     {
                         currentSlide = 0;
                         ShowSlide(0);
+
                     }
 
                     i++;
-                    if(numberOfSlides > 0)
-                    {
-                        ShowContents();
-                    }
                 }
                 Debug.Log("count" + slideList.Count);
                 numberOfSlides = slideList.Count;
-
+                if (numberOfSlides > 0)
+                {
+                    ShowContents();
+                }
                 //testing updating serialized fields
-                    //rawImg.texture = slideList[0].texture;
-                    //audioSource.clip = slideList[0].audioClip;
-                    //Debug.Log(audioSource.clip + " length: " + audioSource.clip.length);
-                    //audioSource.Play();
+                //rawImg.texture = slideList[0].texture;
+                //audioSource.clip = slideList[0].audioClip;
+                //Debug.Log(audioSource.clip + " length: " + audioSource.clip.length);
+                //audioSource.Play();
             }
         }
     }
@@ -186,14 +196,14 @@ public class HttpHandler : MonoBehaviour
     public void ShowSlide(int slideNumber)
     {
         Debug.Log("currentSlide:" + currentSlide);
-        Debug.Log("slideNumber:" + slideNumber);
-        Debug.Log("testing" + slideList[slideNumber].text);
-        Debug.Log("text box available" + textInfo.text);
+        //Debug.Log("slideNumber:" + slideNumber);
+        //Debug.Log("testing" + slideList[slideNumber].text);
+        //Debug.Log("text box available" + textInfo.text);
         textInfo.text = slideList[slideNumber].text;
         title.text = slideList[slideNumber].title;
 
         //make texture into sprite programmatically
-        Texture2D tex = (Texture2D) slideList[slideNumber].texture;
+        Texture2D tex = (Texture2D)slideList[slideNumber].texture;
         Sprite sprite = Sprite.Create(tex, new Rect(0.0f, 0.0f, tex.width, tex.height), new Vector2(0.5f, 0.5f), 100.0f);
         docImage.GetComponent<Image>().sprite = sprite;
     }
@@ -245,27 +255,70 @@ public class HttpHandler : MonoBehaviour
     }
     void OnNextPage()
     {
+        Debug.Log("next page called");
+        //Debug.Log("the number of slides are" + numberOfSlides);
+        //Debug.Log("you are currently on slide " + currentSlide);
         //check if its the last page. If it is, go back to first page
-        if(currentSlide == numberOfSlides-1)
+        if (currentSlide == numberOfSlides - 1)
         {
-            ShowSlide(0);
-        } else
+            GameObject obj = this.gameObject.transform.Find("Previous").gameObject;
+            obj.SetActive(false);
+            currentSlide = 0;
+            ShowSlide(currentSlide);
+            Debug.Log("Start from the begining");
+        }
+        else
         {
-            ShowSlide(currentSlide + 1);
-        }  
+            GameObject obj = this.gameObject.transform.Find("Previous").gameObject;
+            obj.SetActive(true);
+            currentSlide += 1;
+            ShowSlide(currentSlide);
+            Debug.Log("next page started");
+        }
     }
 
     void OnPreviousPage()
     {
         //check if its the first page. If it is, do nothing.
-        if (currentSlide == numberOfSlides - 1)
+        if (currentSlide == 0)
         {
-         
+            Debug.Log("no pages available");
+
         }
         else
         {
-            ShowSlide(currentSlide - 1);
+            currentSlide -= 1;
+            if (currentSlide == 0)
+            {
+                GameObject obj = this.gameObject.transform.Find("Previous").gameObject;
+                obj.SetActive(false);
+            }
+            ShowSlide(currentSlide);
+            Debug.Log("previous page loading");
         }
+    }
+    void OnChangeContent(string title)
+    {
+        for (int x = 0; x < numberOfSlides; x++)
+        {
+            if (title == slideList[x].title)
+            {
+                if(x == 0)
+                {
+                    GameObject obj = this.gameObject.transform.Find("Previous").gameObject;
+                    obj.SetActive(false);
+                }
+                else
+                {
+                    GameObject obj = this.gameObject.transform.Find("Previous").gameObject;
+                    obj.SetActive(true);
+                }
+                currentSlide = x;
+                ShowSlide(x);
+
+            }
+        }
+        Debug.Log("title of contents in http handler" + title);
     }
 }
 
