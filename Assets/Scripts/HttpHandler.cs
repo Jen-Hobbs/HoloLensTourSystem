@@ -23,6 +23,9 @@ public class HttpHandler : MonoBehaviour
     // instance variables
     private int numberOfSlides;
     private int currentSlide;
+    private const int buttonX = 30;
+    private const int buttonStartY = 140;
+    private const int buttonYScale = 20;
 
     //list of all RootObjects for one pop up canvas
     public List<RootObject> slideList =  new List<RootObject>();
