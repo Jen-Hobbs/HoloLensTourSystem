@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Video;
-
+//code by https://mirimad.com/unity-play-video-on-canvas/ 
 public class StreamVideo : MonoBehaviour
 {
     public RawImage rawImage;
