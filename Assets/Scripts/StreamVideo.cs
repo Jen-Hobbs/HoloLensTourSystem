@@ -14,6 +14,10 @@ public class StreamVideo : MonoBehaviour
     {
         StartCoroutine(PlayVideo());
     }
+    /// <summary>
+    /// starts video and audio
+    /// </summary>
+    /// <returns></returns>
     IEnumerator PlayVideo()
     {
         videoPlayer.Prepare();

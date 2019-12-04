@@ -13,6 +13,9 @@ public class DragManager : MonoBehaviour
     }
 
     // Update is called once per frame
+    /// <summary>
+    /// positions canvas to location of camera if true
+    /// </summary>
     void Update()
     {
         Vector3 canvasPosition;
@@ -25,12 +28,18 @@ public class DragManager : MonoBehaviour
         
 
     }
+    /// <summary>
+    /// sets bool to true
+    /// </summary>
     public void Move()
     {
 
         Debug.Log("testing successful");
         holding = true;
     }
+    /// <summary>
+    /// sets bool to false
+    /// </summary>
     public void PlaceCanvas()
     {
         Debug.Log("place canvas");

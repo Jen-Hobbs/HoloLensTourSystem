@@ -7,7 +7,9 @@ public class CanvasGaze : MonoBehaviour
 
     private GameObject focusedObject;
     private GestureRecognizer recognizer;
-
+    /// <summary>
+    /// starts default gestures
+    /// </summary>
     void Start()
     {
         restartGestures();
@@ -96,6 +98,10 @@ public class CanvasGaze : MonoBehaviour
             Debug.Log("focused object is null");
         }
     }
+    /// <summary>
+    /// adds gestures for table of contents buttons
+    /// </summary>
+    /// <param name="titles">titles added to the buttons</param>
     public void addGestures(string[] titles)
     {
         Debug.Log("add gestures started");
@@ -122,6 +128,9 @@ public class CanvasGaze : MonoBehaviour
         };
         recognizer.StartCapturingGestures();
     }
+    /// <summary>
+    /// restart gestures to default gestures
+    /// </summary>
     public void restartGestures()
     {
         if(recognizer != null)

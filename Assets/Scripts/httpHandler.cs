@@ -192,7 +192,10 @@ public class HttpHandler : MonoBehaviour
             }
         }
     }
-
+        /// <summary>
+        /// shows slide information
+        /// </summary>
+        /// <param name="slideNumber">slide number shown</param>
     public void ShowSlide(int slideNumber)
     {
         Debug.Log("currentSlide:" + currentSlide);
@@ -207,6 +210,9 @@ public class HttpHandler : MonoBehaviour
         Sprite sprite = Sprite.Create(tex, new Rect(0.0f, 0.0f, tex.width, tex.height), new Vector2(0.5f, 0.5f), 100.0f);
         docImage.GetComponent<Image>().sprite = sprite;
     }
+    /// <summary>
+    /// adds buttons of table of contents for each slide
+    /// </summary>
     void ShowContents()
     {
         Debug.Log("show contents");
@@ -261,6 +267,9 @@ public class HttpHandler : MonoBehaviour
         this.gameObject.GetComponentInParent<SpeechManager>().addSpeech(titles);
 
     }
+    /// <summary>
+    /// loads next page
+    /// </summary>
     void OnNextPage()
     {
         Debug.Log("next page called");
@@ -284,7 +293,9 @@ public class HttpHandler : MonoBehaviour
             Debug.Log("next page started");
         }
     }
-
+    /// <summary>
+    /// loads previous page
+    /// </summary>
     void OnPreviousPage()
     {
         //check if its the first page. If it is, do nothing.
@@ -305,6 +316,10 @@ public class HttpHandler : MonoBehaviour
             Debug.Log("previous page loading");
         }
     }
+    /// <summary>
+    /// loads page pased of title
+    /// </summary>
+    /// <param name="title">title of page</param>
     void OnChangeContent(string title)
     {
         for (int x = 0; x < numberOfSlides; x++)

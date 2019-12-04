@@ -78,6 +78,11 @@ public class SpeechManager : MonoBehaviour
     //    //Debug.Log(CanvasContent.titles.Length);
 
     //}
+
+    /// <summary>
+    /// Adds table of contents buttons to keyword recognizer
+    /// </summary>
+    /// <param name="buttonName">titles added to keywords</param>
     public void addSpeech(string[] titles)
     {
         keywordRecognizer.Stop();
@@ -104,6 +109,9 @@ public class SpeechManager : MonoBehaviour
         keywordRecognizer.Start();
 
     }
+    /// <summary>
+    /// restarts keyword recognizer to default keys
+    /// </summary>
     public void restartSpeech()
     {
         if(keywordRecognizer != null)

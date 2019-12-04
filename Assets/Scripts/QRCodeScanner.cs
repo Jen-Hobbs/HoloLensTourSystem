@@ -149,6 +149,9 @@ public class QRCodeScanner : MonoBehaviour, IMixedRealityInputHandler
         // Debug.Log("OnInputDown(InputEventData eventData)");
         //photoCaptureObject.TakePhotoAsync(OnCapturedPhotoToMemory);
     }
+    /// <summary>
+    /// starts photo capture
+    /// </summary>
     public void runCanvas()
     {
         
@@ -157,7 +160,9 @@ public class QRCodeScanner : MonoBehaviour, IMixedRealityInputHandler
             photoCaptureObject.TakePhotoAsync(OnCapturedPhotoToMemory);
     }
 
-
+    /// <summary>
+    /// open document depriciated
+    /// </summary>
     void OnOpenDocument()
     {
         if (qrAvailable == true)
