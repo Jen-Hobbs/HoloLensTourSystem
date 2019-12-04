@@ -145,7 +145,7 @@ public class CanvasGaze : MonoBehaviour
                     Debug.Log("previous page");
                     this.gameObject.transform.Find("InfoDoc(Clone)").SendMessage("OnPreviousPage", SendMessageOptions.DontRequireReceiver);
                 }
-                else if (focusedObject == this.gameObject.transform.Find("InfoDoc(Clone)").transform.Find("Close").gameObject)
+                else if (focusedObject == this.gameObject.transform.Find("InfoDoc(Clone)").transform.Find("Close").gameObject || focusedObject == this.gameObject.transform.Find("Demo").transform.Find("Close").gameObject)
                 {
                     Debug.Log("close document");
                     GameObject[] gameObjects = GameObject.FindGameObjectsWithTag("Canvas");
@@ -157,6 +157,7 @@ public class CanvasGaze : MonoBehaviour
                         Destroy(gameObjects[i]);
                     }
                 }
+                
 
 
 
