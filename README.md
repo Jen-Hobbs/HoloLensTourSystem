@@ -14,7 +14,7 @@ HoloLens
 
 A user that has a HoloLens on will be able to walk around a room and find QR codes. These QR codes will relate to an object of interest. The QR code can be scanned by a user through taking a picture using the hololens camera as shown below.
 
-
+https://github.com/Jen-Hobbs/HoloLensTourSystem/blob/master/tap%20qr%20code.png?raw=true
 
  Once a QR code is recognized by the Hololens an interface will pop up allowing the user to see information about the object of interest. 
 
