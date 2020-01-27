@@ -27,3 +27,7 @@ Website
 The website allows an admin to add objects of interest into the database. The Admin is able to create new objects of interest which will result in a QR code being generated. The Admin will be asked to add and image and text information for each page for an object. An object can have multiple pages. The Admin can see all object of interest reprint the QR code, Edit an object, or Delete an Object.
 
 You can find the website portion of this project here https://github.com/joannakwh/HololensWebApp
+
+Technical Specification
+
+For more information about this project please visit the wiki
