@@ -18,7 +18,7 @@ A user that has a HoloLens on will be able to walk around a room and find QR cod
 
  Once a QR code is recognized by the Hololens an interface will pop up allowing the user to see information about the object of interest. 
 
-
+![github-medium](https://github.com/Jen-Hobbs/HoloLensTourSystem/blob/master/QR%20code%20recognized.png?raw=true)
 
 This interface shows a picture and text about the object. There are multiple pages available for the user to see and they can move through the pages by saying voice commands or interacting with the buttons. The buttons available allow the user to go to next page or previous page. On the left is a table of contents that allows the user to jump to a specific page. The document can be closed at any time and the user can then move onto a new object of interest.
 
